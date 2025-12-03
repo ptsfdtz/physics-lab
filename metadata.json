@@ -1,0 +1,5 @@
+{
+  "name": "Physics Lab - High School Visualization Platform",
+  "description": "An interactive physics visualization platform for high school education using React, Konva, and TypeScript.",
+  "requestFramePermissions": []
+}

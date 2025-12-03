@@ -10,26 +10,53 @@
 
 本项目采用以下技术栈：
 
-| 技术                          | 作用                               |
-| ----------------------------- | ---------------------------------- |
-| **Vite + React + TypeScript** | 开发框架与构建工具                 |
-| **react-router-dom**          | 路由管理（首页 → 分类 → 实验页面） |
-| **react-konva + konva**       | Canvas 渲染物理图形场景            |
-| **framer-motion**             | 动画与过渡效果                     |
-| **Zustand**                   | 全局轻量状态管理（主题、单位制等） |
-| **MUI (Material UI)**         | UI 组件库（滑条、按钮、侧边栏）    |
+## 1.1 核心框架
 
-安装命令（pnpm）：
+| 技术                 | 版本    | 作用                               |
+| -------------------- | ------- | ---------------------------------- |
+| **Vite**             | ^7.2.4  | 构建工具与开发服务器               |
+| **React**            | ^19.2.0 | 前端 UI 框架                       |
+| **TypeScript**       | ~5.9.3  | 类型安全的 JavaScript 超集         |
+| **react-router-dom** | ^7.10.0 | 路由管理（首页 → 分类 → 实验页面） |
+
+## 1.2 UI 与可视化
+
+| 技术                  | 版本      | 作用                            |
+| --------------------- | --------- | ------------------------------- |
+| **MUI (Material UI)** | ^7.3.6    | UI 组件库（滑条、按钮、侧边栏） |
+| **@emotion/react**    | ^11.14.0  | MUI 样式引擎                    |
+| **@emotion/styled**   | ^11.14.1  | MUI styled 组件支持             |
+| **react-konva**       | ^19.2.1   | Canvas 渲染物理图形场景         |
+| **konva**             | ^10.0.12  | Konva 核心库                    |
+| **framer-motion**     | ^12.23.25 | 动画与过渡效果                  |
+
+## 1.3 状态管理
+
+| 技术        | 版本   | 作用                               |
+| ----------- | ------ | ---------------------------------- |
+| **Zustand** | ^5.0.9 | 全局轻量状态管理（主题、单位制等） |
+
+## 1.4 开发工具链
+
+| 技术            | 版本    | 作用                 |
+| --------------- | ------- | -------------------- |
+| **ESLint**      | ^9.39.1 | 代码质量检查         |
+| **Prettier**    | ^3.7.4  | 代码格式化           |
+| **Husky**       | ^9.1.7  | Git Hooks 管理       |
+| **lint-staged** | ^16.2.7 | 暂存文件的 lint 检查 |
+| **Commitlint**  | ^20.1.0 | Git 提交信息规范检查 |
+
+## 1.5 开发命令
 
 ```bash
-pnpm add react-router-dom
-pnpm add react-konva konva
-pnpm add framer-motion
-pnpm add zustand
-pnpm add @mui/material @emotion/react @emotion/styled
+pnpm dev          # 启动开发服务器
+pnpm build        # 构建生产版本
+pnpm lint         # 代码检查
+pnpm lint:fix     # 代码检查并自动修复
+pnpm format       # 格式化代码
+pnpm format:check # 检查代码格式
+pnpm preview      # 预览生产构建
 ```
-
----
 
 # 2. 项目结构规范
 
