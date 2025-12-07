@@ -14,17 +14,18 @@ export const UniformMotionRenderer: React.FC<RendererProps> = ({ model, onModelC
   // Scale factor: 10 pixels = 1 meter
   const SCALE = 10;
   const TRACK_Y = 300;
+  const LEFT_PADDING = 40; // pixels to shift the whole track so object is not flush to the left
 
   // Physics Calculation
   const currentDisplacement = uniformDisplacement(model.v, model.t);
-  const currentX = (model.x0 + currentDisplacement) * SCALE;
+  const currentX = LEFT_PADDING + (model.x0 + currentDisplacement) * SCALE;
 
   const handleDragMoveCar = (e: Konva.KonvaEventObject<DragEvent>) => {
     if (!onModelChange) return;
     // Get the new x position from the event
     const newXPixels = e.target.x();
     // Convert pixels to meters
-    const newX = newXPixels / SCALE;
+    const newX = (newXPixels - LEFT_PADDING) / SCALE;
     // Calculate new x0: x = x0 + v*t => x0 = x - v*t
     const newX0 = newX - model.v * model.t;
 
@@ -64,7 +65,7 @@ export const UniformMotionRenderer: React.FC<RendererProps> = ({ model, onModelC
         y={TRACK_Y}
         draggable={!!onModelChange}
         dragBoundFunc={pos => ({
-          x: pos.x,
+          x: Math.max(pos.x, LEFT_PADDING),
           y: TRACK_Y, // Lock Y axis
         })}
         onDragMove={handleDragMoveCar}
@@ -138,7 +139,7 @@ export const UniformMotionRenderer: React.FC<RendererProps> = ({ model, onModelC
       </Group>
 
       {/* Start Line Marker */}
-      <Group x={model.x0 * SCALE} y={TRACK_Y + 20}>
+      <Group x={LEFT_PADDING + model.x0 * SCALE} y={TRACK_Y + 20}>
         <Rect width={2} height={10} fill="#94a3b8" />
         <Text text="起点" y={15} fontSize={10} fill="#94a3b8" />
       </Group>

@@ -11,6 +11,10 @@ export const physicsMenu: MenuItem[] = [
             label: '匀速直线运动',
             path: '/mechanics/kinematics/uniform-motion',
           },
+          {
+            label: '匀变速直线运动',
+            path: '/mechanics/kinematics/uniform-acceleration',
+          },
         ],
       },
     ],

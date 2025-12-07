@@ -8,6 +8,7 @@ interface VectorArrowProps {
   angle?: number; // degrees
   color?: string;
   label?: string;
+  labelOffsetY?: number; // vertical offset for the label (defaults to -20)
 }
 
 export const VectorArrow: React.FC<VectorArrowProps> = ({
@@ -17,6 +18,7 @@ export const VectorArrow: React.FC<VectorArrowProps> = ({
   angle = 0,
   color = 'red',
   label,
+  labelOffsetY = -20,
 }) => {
   // Don't render tiny vectors
   if (Math.abs(length) < 0.1) return null;
@@ -32,7 +34,14 @@ export const VectorArrow: React.FC<VectorArrowProps> = ({
         strokeWidth={4}
       />
       {label && (
-        <Text x={length / 2} y={-20} text={label} fontSize={14} fill={color} fontStyle="bold" />
+        <Text
+          x={length / 2}
+          y={labelOffsetY}
+          text={label}
+          fontSize={14}
+          fill={color}
+          fontStyle="bold"
+        />
       )}
     </Group>
   );

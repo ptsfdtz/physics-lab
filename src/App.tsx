@@ -3,6 +3,7 @@ import { HashRouter, Routes, Route } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import Home from './experiments/Home';
 import UniformMotionPage from './experiments/mechanics/kinematics/UniformMotion/index';
+import UniformAccelerationPage from './experiments/mechanics/kinematics/UniformAcceleration/index';
 
 const App: React.FC = () => {
   return (
@@ -11,6 +12,10 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/mechanics/kinematics/uniform-motion" element={<UniformMotionPage />} />
+          <Route
+            path="/mechanics/kinematics/uniform-acceleration"
+            element={<UniformAccelerationPage />}
+          />
           {/* Fallback for undeveloped routes */}
           <Route path="*" element={<div className="p-8 text-gray-500">Coming Soon...</div>} />
         </Routes>
