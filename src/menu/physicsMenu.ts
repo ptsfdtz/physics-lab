@@ -15,6 +15,10 @@ export const physicsMenu: MenuItem[] = [
             label: '匀变速直线运动',
             path: '/mechanics/kinematics/uniform-acceleration',
           },
+          {
+            label: '自由落体',
+            path: '/mechanics/kinematics/free-fall',
+          },
         ],
       },
     ],

@@ -77,7 +77,7 @@ export const Sidebar: React.FC = () => {
         ))}
       </nav>
       <div className="p-4 border-t border-gray-200 text-xs text-center text-gray-400">
-        v1.0.0 &copy; 2024
+        v1.0.0 © {new Date().getFullYear()} Physics Lab
       </div>
     </aside>
   );
