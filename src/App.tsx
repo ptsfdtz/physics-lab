@@ -5,6 +5,7 @@ import Home from './experiments/Home';
 import UniformMotionPage from './experiments/mechanics/kinematics/UniformMotion/index';
 import UniformAccelerationPage from './experiments/mechanics/kinematics/UniformAcceleration/index';
 import FreeFallPage from './experiments/mechanics/kinematics/FreeFall/index';
+import ProjectilePage from './experiments/mechanics/kinematics/Projectile/index';
 
 const App: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const App: React.FC = () => {
             element={<UniformAccelerationPage />}
           />
           <Route path="/mechanics/kinematics/free-fall" element={<FreeFallPage />} />
+          <Route path="/mechanics/kinematics/projectile" element={<ProjectilePage />} />
           {/* Fallback for undeveloped routes */}
           <Route path="*" element={<div className="p-8 text-gray-500">Coming Soon...</div>} />
         </Routes>

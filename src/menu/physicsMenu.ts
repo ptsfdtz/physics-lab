@@ -19,6 +19,10 @@ export const physicsMenu: MenuItem[] = [
             label: '自由落体',
             path: '/mechanics/kinematics/free-fall',
           },
+          {
+            label: '抛体运动',
+            path: '/mechanics/kinematics/projectile',
+          },
         ],
       },
     ],

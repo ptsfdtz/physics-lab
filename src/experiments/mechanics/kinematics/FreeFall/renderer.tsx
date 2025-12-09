@@ -13,7 +13,7 @@ interface RendererProps {
 export const FreeFallRenderer: React.FC<RendererProps> = ({ model, onModelChange }) => {
   const SCALE = 10; // 10 pixels = 1 m
   const TOP_PADDING = 30; // avoid top edge
-  const BOTTOM_PADDING = 20; // distance from bottom edge to ground line
+  const BOTTOM_PADDING = 60; // distance from bottom edge to ground line
   const groupRef = useRef<Konva.Group | null>(null);
   const [centerX, setCenterX] = useState<number>(100);
   const [stageHeight, setStageHeight] = useState<number>(480);
