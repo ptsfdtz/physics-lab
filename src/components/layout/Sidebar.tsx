@@ -1,25 +1,48 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { physicsMenu } from '../../menu/physicsMenu';
 import type { MenuItem } from '../../types/types';
-import { ChevronRight, ChevronDown } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
+
+function hasActiveChild(node: MenuItem, pathname: string): boolean {
+  if (node.path && node.path === pathname) return true;
+  if (node.children) {
+    return node.children.some(child => hasActiveChild(child, pathname));
+  }
+  return false;
+}
 
 const SidebarItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, depth = 0 }) => {
-  const [isOpen, setIsOpen] = React.useState(true);
+  const location = useLocation();
   const hasChildren = item.children && item.children.length > 0;
+
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+
+  const active = hasActiveChild(item, location.pathname);
+  // show parent active only when collapsed and a descendant is active
+  const showParentActive = hasChildren && !isOpen && active;
 
   return (
     <div className="mb-1">
       {hasChildren ? (
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-100 transition-colors ${depth > 0 ? 'pl-6' : ''}`}
+          className={`w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+            showParentActive
+              ? 'bg-blue-50 text-blue-700 font-medium'
+              : 'text-gray-700 hover:bg-gray-100'
+          } ${depth > 0 ? 'pl-6' : ''}`}
         >
           <span className="flex items-center">
             {depth === 0 && <span className="mr-2 text-blue-500 font-bold">#</span>}
             {item.label}
           </span>
-          {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+
+          {/* Chevron rotated animation */}
+          <ChevronRight
+            size={14}
+            className={`transition-transform duration-300 ${isOpen ? 'rotate-90' : 'rotate-0'}`}
+          />
         </button>
       ) : (
         <NavLink
@@ -34,11 +57,18 @@ const SidebarItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, depth
         </NavLink>
       )}
 
-      {hasChildren && isOpen && (
-        <div className="mt-1">
-          {item.children!.map((child, index) => (
-            <SidebarItem key={index} item={child} depth={depth + 1} />
-          ))}
+      {hasChildren && (
+        <div
+          className={`
+      overflow-hidden transition-all duration-600 ease-in-out
+      ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
+    `}
+        >
+          <div className="mt-1">
+            {item.children!.map((child, index) => (
+              <SidebarItem key={index} item={child} depth={depth + 1} />
+            ))}
+          </div>
         </div>
       )}
     </div>
