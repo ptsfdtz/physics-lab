@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Layer, Rect, Circle, Group, Text } from 'react-konva';
+import { Layer, Rect, Circle, Group, Text, Line } from 'react-konva';
 import Konva from 'konva';
 import type { FreeFallModel } from './model';
 import { displacementTime, velocityTime } from '../../../../physics/kinematics';
@@ -25,6 +25,18 @@ export const FreeFallRenderer: React.FC<RendererProps> = ({ model, onModelChange
   const groundY = stageHeight - BOTTOM_PADDING;
   const currentY = groundY - currentHeight * SCALE;
   const currentV = velocityTime(model.v0, model.g, model.t);
+
+  // trajectory points (sampled) for dashed path from t=0 to current t
+  const samples = Math.max(2, Math.min(60, Math.ceil(model.t / 0.05)));
+  const points: number[] = [];
+  for (let i = 0; i <= samples; i++) {
+    const ts = (i / samples) * model.t;
+    const disp = displacementTime(model.v0, model.g, ts); // downward displacement
+    const h = Math.max(0, model.y0 - disp);
+    const px = centerX;
+    const py = groundY - h * SCALE;
+    points.push(px, py);
+  }
 
   const handleDragMoveBall = (e: Konva.KonvaEventObject<DragEvent>) => {
     if (!onModelChange) return;
@@ -54,6 +66,10 @@ export const FreeFallRenderer: React.FC<RendererProps> = ({ model, onModelChange
     <Layer>
       {/* ground */}
       <Rect x={0} y={groundY} width={2000} height={6} fill="#94a3b8" />
+
+      {points.length >= 4 && (
+        <Line points={points} stroke="#64748b" strokeWidth={2} dash={[8, 6]} tension={0.2} />
+      )}
 
       <Group
         ref={groupRef}

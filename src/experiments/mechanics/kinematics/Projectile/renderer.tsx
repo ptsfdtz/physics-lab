@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Layer, Rect, Circle, Group, Text } from 'react-konva';
+import { Layer, Rect, Circle, Group, Text, Line } from 'react-konva';
 import Konva from 'konva';
 import type { ProjectileModel } from './model';
 import { VectorArrow } from '../../../../components/physics/VectorArrow';
@@ -34,6 +34,18 @@ export const ProjectileRenderer: React.FC<RendererProps> = ({ model, onModelChan
   const pixelX = centerX + x * SCALE;
   const pixelY = groundY - y * SCALE;
 
+  // trajectory sampled points from t=0 to current t
+  const samples = Math.max(2, Math.min(120, Math.ceil(model.t / 0.02)));
+  const trajPoints: number[] = [];
+  for (let i = 0; i <= samples; i++) {
+    const ts = (i / samples) * model.t;
+    const xs = model.x0 + vx * ts;
+    const ys = Math.max(0, model.y0 + vy0 * ts - 0.5 * model.g * ts * ts);
+    const px = centerX + xs * SCALE;
+    const py = groundY - ys * SCALE;
+    trajPoints.push(px, py);
+  }
+
   const handleDrag = (e: Konva.KonvaEventObject<DragEvent>) => {
     if (!onModelChange) return;
     const px = e.target.x();
@@ -59,6 +71,11 @@ export const ProjectileRenderer: React.FC<RendererProps> = ({ model, onModelChan
   return (
     <Layer>
       <Rect x={0} y={groundY} width={2000} height={6} fill="#94a3b8" />
+
+      {/* trajectory (dashed) */}
+      {trajPoints.length >= 4 && (
+        <Line points={trajPoints} stroke="#64748b" strokeWidth={2} dash={[6, 6]} tension={0.3} />
+      )}
 
       <Group
         ref={groupRef}
