@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { physicsMenu } from '../../menu/physicsMenu';
-import type { MenuItem } from '../../types';
+import type { MenuItem } from '../../types/types';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 
 const SidebarItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, depth = 0 }) => {

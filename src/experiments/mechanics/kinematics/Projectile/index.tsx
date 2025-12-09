@@ -5,6 +5,7 @@ import ProjectileRenderer from './renderer';
 import { defaultModel, modelConfigs } from './model';
 import type { ProjectileModel } from './model';
 import { useAnimationFrame } from '../../../../hooks/useAnimationFrame';
+import { BlockMath } from 'react-katex';
 
 export default function ProjectilePage() {
   const [model, setModel] = useState<ProjectileModel>(defaultModel);
@@ -37,11 +38,7 @@ export default function ProjectilePage() {
         onReset={handleReset}
         isPlaying={isPlaying}
         formula={
-          <span>
-            <i className="font-serif">x</i> = <i className="font-serif">x</i>₀ +{' '}
-            <i className="font-serif">v</i>cosθ·t, <i className="font-serif">y</i> ={' '}
-            <i className="font-serif">y</i>₀ + <i className="font-serif">v</i>sinθ·t - 1/2gt²
-          </span>
+          <BlockMath math="\begin{cases}x = x_0 + v\cos\theta\,t\\y = y_0 + v\sin\theta\,t - \tfrac{1}{2}gt^2\end{cases}" />
         }
       />
     </div>

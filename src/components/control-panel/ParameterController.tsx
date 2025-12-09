@@ -1,6 +1,6 @@
 import React from 'react';
 import { Play, Pause, RotateCcw } from 'lucide-react';
-import type { ParameterConfig } from '../../types';
+import type { ParameterConfig } from '../../types/types';
 import { Button } from '../ui/Button';
 
 interface ParameterControllerProps<T> {
@@ -78,7 +78,9 @@ export function ParameterController<T extends object>({
           <div className="pt-6 mt-2 border-t border-gray-100">
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">公式</h3>
             <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 text-center">
-              <div className="text-gray-800 font-serif text-lg leading-relaxed">{formula}</div>
+              <div className="text-gray-800 font-serif text-lg leading-relaxed katex-display">
+                {formula}
+              </div>
             </div>
           </div>
         )}

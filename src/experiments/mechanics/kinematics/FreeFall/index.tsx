@@ -5,6 +5,7 @@ import FreeFallRenderer from './renderer';
 import { defaultModel, modelConfigs } from './model';
 import type { FreeFallModel } from './model';
 import { useAnimationFrame } from '../../../../hooks/useAnimationFrame';
+import { BlockMath } from 'react-katex';
 
 export default function FreeFallPage() {
   const [model, setModel] = useState<FreeFallModel>(defaultModel);
@@ -36,13 +37,7 @@ export default function FreeFallPage() {
         onPlayPause={handlePlayPause}
         onReset={handleReset}
         isPlaying={isPlaying}
-        formula={
-          <span>
-            <i className="font-serif">y</i> = <i className="font-serif">y</i>₀ +{' '}
-            <i className="font-serif">v</i>₀<i className="font-serif">t</i> + 1/2{' '}
-            <i className="font-serif">g</i> <i className="font-serif">t</i>²
-          </span>
-        }
+        formula={<BlockMath math="y = y_0 + v_0 t + \tfrac{1}{2} g t^2" />}
       />
     </div>
   );

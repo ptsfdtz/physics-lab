@@ -1,4 +1,4 @@
-import type { ParameterConfig } from '../../../../types';
+import type { ParameterConfig } from '../../../../types/types';
 
 export interface UniformAccelerationModel {
   v0: number; // initial velocity (m/s)

@@ -5,6 +5,7 @@ import { UniformMotionRenderer } from './renderer';
 import { defaultModel, modelConfigs } from './model';
 import type { UniformMotionModel } from './model';
 import { useAnimationFrame } from '../../../../hooks/useAnimationFrame';
+import { BlockMath } from 'react-katex';
 
 export default function UniformMotionPage() {
   const [model, setModel] = useState<UniformMotionModel>(defaultModel);
@@ -40,13 +41,7 @@ export default function UniformMotionPage() {
         onPlayPause={handlePlayPause}
         onReset={handleReset}
         isPlaying={isPlaying}
-        formula={
-          <span>
-            <i className="font-serif">x</i> = <i className="font-serif">x</i>₀ +{' '}
-            <i className="font-serif">v</i>
-            <i className="font-serif">t</i>
-          </span>
-        }
+        formula={<BlockMath math="x = x_0 + v t" />}
       />
     </div>
   );

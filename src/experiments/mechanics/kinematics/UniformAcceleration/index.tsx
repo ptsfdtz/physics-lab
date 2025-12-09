@@ -5,6 +5,7 @@ import { UniformAccelerationRenderer } from './renderer';
 import { defaultModel, modelConfigs } from './model';
 import type { UniformAccelerationModel } from './model';
 import { useAnimationFrame } from '../../../../hooks/useAnimationFrame';
+import { BlockMath } from 'react-katex';
 
 export default function UniformAccelerationPage() {
   const [model, setModel] = useState<UniformAccelerationModel>(defaultModel);
@@ -36,14 +37,7 @@ export default function UniformAccelerationPage() {
         onPlayPause={handlePlayPause}
         onReset={handleReset}
         isPlaying={isPlaying}
-        formula={
-          <span>
-            <i className="font-serif">x</i> = <i className="font-serif">x</i>₀ +{' '}
-            <i className="font-serif">v</i>₀<i className="font-serif">t</i> + 1/2
-            <i className="font-serif">a</i>
-            <i className="font-serif">t</i>²
-          </span>
-        }
+        formula={<BlockMath math="x = x_0 + v_0 t + \tfrac{1}{2} a t^2" />}
       />
     </div>
   );

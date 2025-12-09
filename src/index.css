@@ -7,3 +7,19 @@
     box-sizing: border-box;
   }
 }
+
+/* KaTeX formula sizing tweaks: make rendered formulas slightly smaller and centered */
+.katex-display {
+  display: flex;
+  justify-content: center;
+}
+.katex-display .katex,
+.katex-display .katex * {
+  font-size: 1.4rem;
+  line-height: 1.15;
+}
+
+.katex .katex-html {
+  /* ensure HTML output matches sizing */
+  font-size: 1rem;
+}

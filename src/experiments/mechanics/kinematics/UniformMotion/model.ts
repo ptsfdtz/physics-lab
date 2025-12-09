@@ -1,4 +1,4 @@
-import type { ParameterConfig } from '../../../../types';
+import type { ParameterConfig } from '../../../../types/types';
 
 export interface UniformMotionModel {
   v: number; // Velocity (m/s)
