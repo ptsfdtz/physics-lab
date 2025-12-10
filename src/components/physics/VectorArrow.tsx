@@ -35,12 +35,14 @@ export const VectorArrow: React.FC<VectorArrowProps> = ({
       />
       {label && (
         <Text
-          x={length / 2}
+          x={length + (length >= 0 ? 10 : -10)}
           y={labelOffsetY}
           text={label}
           fontSize={14}
           fill={color}
           fontStyle="bold"
+          rotation={-angle}
+          offsetY={7}
         />
       )}
     </Group>

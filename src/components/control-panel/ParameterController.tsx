@@ -10,6 +10,7 @@ interface ParameterControllerProps<T> {
   onPlayPause?: () => void;
   onReset?: () => void;
   isPlaying?: boolean;
+  onDecompose?: () => void;
   formula?: React.ReactNode;
 }
 
@@ -20,6 +21,7 @@ export function ParameterController<T extends object>({
   onPlayPause,
   onReset,
   isPlaying,
+  onDecompose,
   formula,
 }: ParameterControllerProps<T>) {
   const handleChange = (key: keyof T, value: number) => {
@@ -92,6 +94,11 @@ export function ParameterController<T extends object>({
             {isPlaying ? <Pause size={16} /> : <Play size={16} />}
             {isPlaying ? '暂停' : '开始'}
           </Button>
+          {onDecompose && (
+            <Button variant="outline" onClick={onDecompose} title="分解演示">
+              分解
+            </Button>
+          )}
           <Button variant="outline" onClick={onReset} title="重置">
             <RotateCcw size={16} />
           </Button>
