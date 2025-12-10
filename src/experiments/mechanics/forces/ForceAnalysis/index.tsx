@@ -10,6 +10,7 @@ import { BlockMath } from 'react-katex';
 export default function ForceAnalysisPage() {
   const [model, setModel] = useState<ForceAnalysisModel>(defaultModel);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isDecomposing, setIsDecomposing] = useState(false);
 
   // Animation Loop: 积分计算速度和位移
   useAnimationFrame((deltaTime: number) => {
@@ -80,10 +81,19 @@ export default function ForceAnalysisPage() {
     setModel(defaultModel);
   }, []);
 
+  const handleDecompose = useCallback(() => {
+    setIsDecomposing(prev => !prev);
+  }, []);
+
   return (
     <div className="flex h-full w-full">
       <PhysicsCanvas>
-        <ForceAnalysisRenderer model={model} onModelChange={setModel} />
+        <ForceAnalysisRenderer
+          model={model}
+          onModelChange={setModel}
+          decomposePlaying={isDecomposing}
+          onDecomposeDone={() => setIsDecomposing(false)}
+        />
       </PhysicsCanvas>
 
       <ParameterController
@@ -93,6 +103,7 @@ export default function ForceAnalysisPage() {
         onPlayPause={handlePlayPause}
         onReset={handleReset}
         isPlaying={isPlaying}
+        onDecompose={handleDecompose}
         formula={
           <BlockMath math={String.raw`F\cos\theta - f = ma\\ f = \mu N\\ N = mg - F\sin\theta`} />
         }
