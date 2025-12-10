@@ -28,7 +28,7 @@ export default function Home() {
       <div className="mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">物理可视化平台</h1>
         <p className="text-xl text-gray-600 max-w-2xl">
-          面向高中物理教育的高性能交互式实验室。从侧边栏选择一个模块开始实验。
+          面向高中物理教育的高性能交互式实验室。从侧边栏选择一个模块开始。
         </p>
       </div>
 

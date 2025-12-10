@@ -15,18 +15,22 @@ function hasActiveChild(node: MenuItem, pathname: string): boolean {
 const SidebarItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, depth = 0 }) => {
   const location = useLocation();
   const hasChildren = item.children && item.children.length > 0;
-
-  const [isOpen, setIsOpen] = React.useState<boolean>(false);
-
   const active = hasActiveChild(item, location.pathname);
-  // show parent active only when collapsed and a descendant is active
+
+  const [isOpen, setIsOpen] = React.useState<boolean>(() => active);
+
+  React.useEffect(() => {
+    const shouldExpand = hasActiveChild(item, location.pathname);
+    setIsOpen(shouldExpand);
+  }, [location.pathname, item]);
+
   const showParentActive = hasChildren && !isOpen && active;
 
   return (
     <div className="mb-1">
       {hasChildren ? (
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsOpen(prev => !prev)}
           className={`w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors ${
             showParentActive
               ? 'bg-blue-50 text-blue-700 font-medium'
@@ -38,7 +42,6 @@ const SidebarItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, depth
             {item.label}
           </span>
 
-          {/* Chevron rotated animation */}
           <ChevronRight
             size={14}
             className={`transition-transform duration-300 ${isOpen ? 'rotate-90' : 'rotate-0'}`}
@@ -59,10 +62,7 @@ const SidebarItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, depth
 
       {hasChildren && (
         <div
-          className={`
-      overflow-hidden transition-all duration-600 ease-in-out
-      ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
-    `}
+          className={`overflow-hidden transition-all duration-600 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
         >
           <div className="mt-1">
             {item.children!.map((child, index) => (
