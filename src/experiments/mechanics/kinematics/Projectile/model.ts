@@ -1,4 +1,4 @@
-import type { ParameterConfig } from '../../../../types/types';
+import type { ParameterConfig } from '@/types/types';
 
 export interface ProjectileModel {
   v: number; // initial speed magnitude (m/s)

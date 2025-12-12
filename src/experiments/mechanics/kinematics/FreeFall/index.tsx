@@ -1,11 +1,12 @@
-import { useState, useCallback } from 'react';
-import { PhysicsCanvas } from '../../../../components/canvas/PhysicsCanvas';
-import { ParameterController } from '../../../../components/control-panel/ParameterController';
-import FreeFallRenderer from './renderer';
+import { useCallback, useState } from 'react';
+import { BlockMath } from 'react-katex';
+
+import { ParameterController, PhysicsCanvas } from '@/components';
+import { useAnimationFrame } from '@/hooks/useAnimationFrame';
+
 import { defaultModel, modelConfigs } from './model';
 import type { FreeFallModel } from './model';
-import { useAnimationFrame } from '../../../../hooks/useAnimationFrame';
-import { BlockMath } from 'react-katex';
+import FreeFallRenderer from './renderer';
 
 export default function FreeFallPage() {
   const [model, setModel] = useState<FreeFallModel>(defaultModel);

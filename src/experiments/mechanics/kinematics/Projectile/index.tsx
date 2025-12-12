@@ -1,11 +1,12 @@
-import { useState, useCallback } from 'react';
-import { PhysicsCanvas } from '../../../../components/canvas/PhysicsCanvas';
-import { ParameterController } from '../../../../components/control-panel/ParameterController';
-import ProjectileRenderer from './renderer';
+import { useCallback, useState } from 'react';
+import { BlockMath } from 'react-katex';
+
+import { ParameterController, PhysicsCanvas } from '@/components';
+import { useAnimationFrame } from '@/hooks/useAnimationFrame';
+
 import { defaultModel, modelConfigs } from './model';
 import type { ProjectileModel } from './model';
-import { useAnimationFrame } from '../../../../hooks/useAnimationFrame';
-import { BlockMath } from 'react-katex';
+import ProjectileRenderer from './renderer';
 
 export default function ProjectilePage() {
   const [model, setModel] = useState<ProjectileModel>(defaultModel);

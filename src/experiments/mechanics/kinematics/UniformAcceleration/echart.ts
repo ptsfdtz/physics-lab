@@ -1,6 +1,7 @@
-import type { ExperimentChartSpec } from '../../../../components/chart/types';
+import type { ExperimentChartSpec } from '@/components/chart/types';
+import { displacementTime, velocityTime } from '@/physics/kinematics';
+
 import type { UniformAccelerationModel } from './model';
-import { displacementTime, velocityTime } from '../../../../physics/kinematics';
 
 export function samplePoint(model: UniformAccelerationModel) {
   const t = model.t;

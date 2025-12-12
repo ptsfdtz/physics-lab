@@ -1,4 +1,4 @@
-import type { ParameterConfig } from '../../../../types/types';
+import type { ParameterConfig } from '@/types/types';
 
 export interface FreeFallModel {
   v0: number; // initial vertical velocity (m/s), positive downwards

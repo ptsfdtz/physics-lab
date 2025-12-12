@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Stage } from 'react-konva';
-import { Button } from '../ui/Button';
+
 import { useUserSettings } from '../../store/userSettings';
 import { GridBackground } from '../physics/GridBackground';
+import { Button } from '../ui/Button';
 
 interface PhysicsCanvasProps {
   children: React.ReactNode;

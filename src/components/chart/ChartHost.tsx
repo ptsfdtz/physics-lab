@@ -1,6 +1,4 @@
-import { useEffect, useRef } from 'react';
-import type { CSSProperties } from 'react';
-import * as echarts from 'echarts/core';
+import type { EChartsOption } from 'echarts';
 import { LineChart, ScatterChart } from 'echarts/charts';
 import {
   GridComponent,
@@ -8,9 +6,11 @@ import {
   TooltipComponent,
   DataZoomComponent,
 } from 'echarts/components';
-import { CanvasRenderer } from 'echarts/renderers';
-import type { EChartsOption } from 'echarts';
+import * as echarts from 'echarts/core';
 import type { EChartsType } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { useEffect, useRef } from 'react';
+import type { CSSProperties } from 'react';
 
 let echartsInitialized = false;
 

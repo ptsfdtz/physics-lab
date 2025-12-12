@@ -1,4 +1,4 @@
-import type { ParameterConfig } from '../../../../types/types';
+import type { ParameterConfig } from '@/types/types';
 
 export interface ForceAnalysisModel {
   m: number; // 质量 (kg)

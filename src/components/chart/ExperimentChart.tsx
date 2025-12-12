@@ -1,10 +1,11 @@
+import type { EChartsOption } from 'echarts';
 import { useMemo } from 'react';
 import type { CSSProperties } from 'react';
-import type { ExperimentChartSpec, MetricRegistry } from './types';
-import type { EChartsOption } from 'echarts';
-import { buildChartOption } from './specAdapter';
+
 import { ChartHost } from './ChartHost';
 import { baseMetricRegistry } from './metricsRegistry';
+import { buildChartOption } from './specAdapter';
+import type { ExperimentChartSpec, MetricRegistry } from './types';
 
 interface ExperimentChartProps<DataRow extends Record<string, unknown>, Ctx = unknown> {
   spec: ExperimentChartSpec<DataRow, Ctx>;

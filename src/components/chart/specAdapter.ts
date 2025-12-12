@@ -1,6 +1,7 @@
 import type { EChartsOption, SeriesOption } from 'echarts';
-import type { ExperimentChartSpec, MetricRegistry } from './types';
+
 import { resolveAxisMeta } from './metricsRegistry';
+import type { ExperimentChartSpec, MetricRegistry } from './types';
 
 interface BuildOptionParams<DataRow, Ctx> {
   spec: ExperimentChartSpec<DataRow, Ctx>;

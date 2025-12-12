@@ -1,14 +1,13 @@
-import { useState, useCallback, useMemo } from 'react';
-import { PhysicsCanvas } from '../../../../components/canvas/PhysicsCanvas';
-import { ParameterController } from '../../../../components/control-panel/ParameterController';
-import { UniformAccelerationRenderer } from './renderer';
+import { useCallback, useMemo, useState } from 'react';
+import { BlockMath } from 'react-katex';
+
+import { ExperimentChart, ParameterController, PhysicsCanvas, Select } from '@/components';
+import { useAnimationFrame } from '@/hooks/useAnimationFrame';
+
+import { buildSpec, samplePoint } from './echart';
 import { defaultModel, modelConfigs } from './model';
 import type { UniformAccelerationModel } from './model';
-import { useAnimationFrame } from '../../../../hooks/useAnimationFrame';
-import { BlockMath } from 'react-katex';
-import { ExperimentChart } from '../../../../components/chart/ExperimentChart';
-import { Select } from '../../../../components/ui/Select';
-import { samplePoint, buildSpec } from './echart';
+import { UniformAccelerationRenderer } from './renderer';
 
 export default function UniformAccelerationPage() {
   const [model, setModel] = useState<UniformAccelerationModel>(defaultModel);

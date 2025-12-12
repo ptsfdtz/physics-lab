@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button } from './Button';
 import { ChevronDown } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { Button } from './Button';
 
 interface Option<T extends string> {
   value: T;
