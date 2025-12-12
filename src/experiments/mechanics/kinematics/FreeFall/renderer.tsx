@@ -1,9 +1,11 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Layer, Rect, Circle, Group, Text, Line } from 'react-konva';
 import Konva from 'konva';
+import React, { useEffect, useRef, useState } from 'react';
+import { Circle, Group, Layer, Line, Rect, Text } from 'react-konva';
+
+import { VectorArrow } from '@/components';
+import { displacementTime, velocityTime } from '@/physics/kinematics';
+
 import type { FreeFallModel } from './model';
-import { displacementTime, velocityTime } from '../../../../physics/kinematics';
-import { VectorArrow } from '../../../../components/physics/VectorArrow';
 
 interface RendererProps {
   model: FreeFallModel;

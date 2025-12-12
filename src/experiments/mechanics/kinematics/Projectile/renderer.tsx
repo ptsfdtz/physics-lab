@@ -1,9 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Layer, Rect, Circle, Group, Text, Line } from 'react-konva';
 import Konva from 'konva';
+import React, { useEffect, useRef, useState } from 'react';
+import { Circle, Group, Layer, Line, Rect, Text } from 'react-konva';
+
+import { VectorArrow } from '@/components';
+
 import type { ProjectileModel } from './model';
-import { VectorArrow } from '../../../../components/physics/VectorArrow';
-// import { velocityTime } from '../../../../physics/kinematics';
 
 interface RendererProps {
   model: ProjectileModel;

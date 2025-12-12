@@ -1,7 +1,8 @@
-import React from 'react';
 import { Play, Pause, RotateCcw } from 'lucide-react';
-import type { ParameterConfig } from '../../types/types';
-import { Button } from '../ui/Button';
+import React from 'react';
+
+import { Button } from '@/components/ui/Button';
+import type { ParameterConfig } from '@/types/types';
 
 interface ParameterControllerProps<T> {
   model: T;

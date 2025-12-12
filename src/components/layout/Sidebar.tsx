@@ -1,8 +1,9 @@
+import { ChevronRight } from 'lucide-react';
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+
 import { physicsMenu } from '../../menu/physicsMenu';
 import type { MenuItem } from '../../types/types';
-import { ChevronRight } from 'lucide-react';
 
 function hasActiveChild(node: MenuItem, pathname: string): boolean {
   if (node.path && node.path === pathname) return true;

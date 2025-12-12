@@ -1,12 +1,13 @@
 import React from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom';
-import MainLayout from './components/layout/MainLayout';
-import Home from './experiments/Home';
-import UniformMotionPage from './experiments/mechanics/kinematics/UniformMotion/index';
-import UniformAccelerationPage from './experiments/mechanics/kinematics/UniformAcceleration/index';
-import FreeFallPage from './experiments/mechanics/kinematics/FreeFall/index';
-import ProjectilePage from './experiments/mechanics/kinematics/Projectile/index';
-import ForceAnalysisPage from './experiments/mechanics/forces/ForceAnalysis/index';
+import { HashRouter, Route, Routes } from 'react-router-dom';
+
+import { MainLayout } from '@/components';
+import Home from '@/experiments/Home';
+import ForceAnalysisPage from '@/experiments/mechanics/forces/ForceAnalysis';
+import FreeFallPage from '@/experiments/mechanics/kinematics/FreeFall';
+import ProjectilePage from '@/experiments/mechanics/kinematics/Projectile';
+import UniformAccelerationPage from '@/experiments/mechanics/kinematics/UniformAcceleration';
+import UniformMotionPage from '@/experiments/mechanics/kinematics/UniformMotion';
 
 const App: React.FC = () => {
   return (

@@ -1,9 +1,11 @@
-import React from 'react';
-import { Layer, Rect, Group, Text, Circle } from 'react-konva';
 import Konva from 'konva';
+import React from 'react';
+import { Circle, Group, Layer, Rect, Text } from 'react-konva';
+
+import { VectorArrow } from '@/components';
+import { displacementTime, velocityTime } from '@/physics/kinematics';
+
 import type { UniformAccelerationModel } from './model';
-import { displacementTime, velocityTime } from '../../../../physics/kinematics';
-import { VectorArrow } from '../../../../components/physics/VectorArrow';
 
 interface RendererProps {
   model: UniformAccelerationModel;

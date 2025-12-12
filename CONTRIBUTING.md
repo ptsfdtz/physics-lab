@@ -14,21 +14,23 @@
 
 | 技术                 | 版本    | 作用                               |
 | -------------------- | ------- | ---------------------------------- |
-| **Vite**             | ^7.2.4  | 构建工具与开发服务器               |
-| **React**            | ^19.2.0 | 前端 UI 框架                       |
+| **Vite**             | ^7.2.7  | 构建工具与开发服务器               |
+| **React**            | ^19.2.1 | 前端 UI 框架                       |
 | **TypeScript**       | ~5.9.3  | 类型安全的 JavaScript 超集         |
-| **react-router-dom** | ^7.10.0 | 路由管理（首页 → 分类 → 实验页面） |
+| **react-router-dom** | ^7.10.1 | 路由管理（首页 → 分类 → 实验页面） |
 
 ## 1.2 UI 与可视化
 
-| 技术                  | 版本      | 作用                            |
-| --------------------- | --------- | ------------------------------- |
-| **MUI (Material UI)** | ^7.3.6    | UI 组件库（滑条、按钮、侧边栏） |
-| **@emotion/react**    | ^11.14.0  | MUI 样式引擎                    |
-| **@emotion/styled**   | ^11.14.1  | MUI styled 组件支持             |
-| **react-konva**       | ^19.2.1   | Canvas 渲染物理图形场景         |
-| **konva**             | ^10.0.12  | Konva 核心库                    |
-| **framer-motion**     | ^12.23.25 | 动画与过渡效果                  |
+| 技术                  | 版本      | 作用                                         |
+| --------------------- | --------- | -------------------------------------------- |
+| **MUI (Material UI)** | ^7.3.6    | UI 组件库（滑条、按钮、侧边栏）              |
+| **@emotion/react**    | ^11.14.0  | MUI 样式引擎                                 |
+| **@emotion/styled**   | ^11.14.1  | MUI styled 组件支持                          |
+| **react-konva**       | ^19.2.1   | Canvas 渲染物理图形场景                      |
+| **konva**             | ^10.0.12  | Konva 核心库                                 |
+| **echarts**           | ^6.0.0    | 实验图表与数据可视化（ExperimentChart 组件） |
+| **framer-motion**     | ^12.23.25 | 动画与过渡效果                               |
+| **katex**             | ^0.16.x   | 数学公式渲染（在 `main.tsx` 中引入）         |
 
 ## 1.3 状态管理
 
@@ -66,12 +68,11 @@ physics-lab/
 │   └── icons/                     # 图标素材
 │
 ├── src/
-│   ├── app/
-│   │   ├── router.tsx             # 路由表
-│   │   ├── layout/                # 布局组件（侧边栏/顶部栏）
-│   │   │   └── SidebarLayout.tsx
-│   │   └── menu/                  # 左侧分类菜单
-│   │       └── physicsMenu.ts
+│   ├── App.tsx                     # 路由表（使用 `HashRouter`，路由定义在此）
+│   ├── layout/                     # 布局组件（侧边栏/顶部栏）
+│   │   └── SidebarLayout.tsx
+│   └── menu/                       # 左侧分类菜单
+│       └── physicsMenu.ts
 │   │
 │   ├── components/                # 公共组件
 │   │   ├── ui/                    # 基础 UI 组件
@@ -79,7 +80,11 @@ physics-lab/
 │   │   │   └── ParameterController.tsx
 │   │   ├── canvas/                # Konva 封装
 │   │   │   └── PhysicsCanvas.tsx
-│   │   ├── chart/                 # 图表相关
+│   │   ├── chart/                 # 图表相关（ExperimentChart / ChartHost / specAdapter / types）
+│   │   │   ├── ExperimentChart.tsx
+│   │   │   ├── ChartHost.tsx
+│   │   │   ├── specAdapter.ts
+│   │   │   └── types.ts
 │   │   └── physics/               # 通用物理展示组件
 │   │       ├── VectorArrow.tsx
 │   │       ├── GridBackground.tsx
@@ -154,12 +159,13 @@ export const physicsMenu = [
 
 # 4. 物理实验模块规范（最核心）
 
-每个实验模块必须包含 3 个文件：
+每个实验模块必须包含 3 个文件（如需图表支持可选第 4 个）：
 
 ```
 model.ts        ← 定义参数（支持用户自定义）
 renderer.tsx    ← 实验可视化界面（Konva）
 index.tsx       ← 页面组件（控制面板 + Canvas）
+echart.ts       ← （可选）图表适配：导出 `samplePoint` 与 `buildSpec`
 ```
 
 ### 4.1 model.ts（实验参数模型）
@@ -244,13 +250,14 @@ export default function UniformMotionPage() {
 包括：
 
 - Button
+- Select
 - Slider
 - InputNumber
 - Switch
 - Card
 - Tabs
 
-UI 统一使用 MUI 风格。
+UI 统一使用 MUI 风格。常用图标使用 `lucide-react` 提供轻量图标。
 
 ---
 
@@ -285,6 +292,35 @@ UI 统一使用 MUI 风格。
 开发者不需要重复写 UI，提高效率。
 
 ---
+
+### 5.4 实验图表规范（Experiment Charts）
+
+项目使用 `src/components/chart` 下的图表基础设施（`ExperimentChart`、`ChartHost`、`specAdapter`、`types`）来渲染实验图表。为保证一致性，请遵循以下约定：
+
+- 文件与导出：若实验需要图表，请在实验目录下新增 `echart.ts` 并导出：
+  - `samplePoint(model)`：返回当前模型的采样点对象（例如 `{ t, x, y, v }`）。
+  - `buildSpec(xKey, yKey)`：根据所选坐标构建并返回 `ExperimentChartSpec`。
+
+- 页面集成（推荐模式）：
+  1. 在 `index.tsx` 中维护 `chartData`（数组）以及 `chartXKey` / `chartYKey`；
+  2. 播放时使用 `samplePoint` 采样并追加到 `chartData`；
+  3. 通过 `buildSpec(chartXKey, chartYKey)` 获取 `spec`，并将 `spec` 与 `data` 传入 `ExperimentChart`；
+  4. 建议将图表放在 `PhysicsCanvas` 的 `overlay` 区域，并用 `Select` 控件切换轴。
+
+- 轴与数据：常见 key 包括 `t`（时间，s）、`x`/`y`（位移/高度，m）、`v`（速度，m/s）。确保 `samplePoint` 返回对象包含 `spec` 使用的 key。
+
+- 视觉与交互：折线默认 `smooth: true`；`spec` 中可配置颜色、是否显示符号等；避免在 `renderer.tsx` 中混入图表逻辑，图表数据应来自 `samplePoint` 或物理核心函数。
+
+示例代码片段（`index.tsx`）:
+
+```tsx
+const [chartData, setChartData] = useState([]);
+useAnimationFrame(() => {
+  if (isPlaying) setChartData(prev => [...prev, samplePoint(model)]);
+}, isPlaying);
+const spec = buildSpec(chartXKey, chartYKey);
+<ExperimentChart spec={spec} data={chartData} />;
+```
 
 # 6. 物理计算核心规范
 

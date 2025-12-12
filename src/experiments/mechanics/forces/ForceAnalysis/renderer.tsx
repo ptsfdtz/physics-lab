@@ -1,8 +1,10 @@
+import Konva from 'konva';
 import React, { useEffect, useState } from 'react';
 import { Layer, Rect, Circle, Group, Text } from 'react-konva';
+
+import { VectorArrow } from '@/components/physics/VectorArrow';
+
 import type { ForceAnalysisModel } from './model';
-import { VectorArrow } from '../../../../components/physics/VectorArrow';
-import Konva from 'konva';
 
 interface Props {
   model: ForceAnalysisModel;
