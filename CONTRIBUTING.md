@@ -14,21 +14,22 @@
 
 | 技术                 | 版本    | 作用                               |
 | -------------------- | ------- | ---------------------------------- |
-| **Vite**             | ^7.2.4  | 构建工具与开发服务器               |
-| **React**            | ^19.2.0 | 前端 UI 框架                       |
+| **Vite**             | ^7.2.7  | 构建工具与开发服务器               |
+| **React**            | ^19.2.1 | 前端 UI 框架                       |
 | **TypeScript**       | ~5.9.3  | 类型安全的 JavaScript 超集         |
-| **react-router-dom** | ^7.10.0 | 路由管理（首页 → 分类 → 实验页面） |
+| **react-router-dom** | ^7.10.1 | 路由管理（首页 → 分类 → 实验页面） |
 
 ## 1.2 UI 与可视化
 
-| 技术                  | 版本      | 作用                            |
-| --------------------- | --------- | ------------------------------- |
-| **MUI (Material UI)** | ^7.3.6    | UI 组件库（滑条、按钮、侧边栏） |
-| **@emotion/react**    | ^11.14.0  | MUI 样式引擎                    |
-| **@emotion/styled**   | ^11.14.1  | MUI styled 组件支持             |
-| **react-konva**       | ^19.2.1   | Canvas 渲染物理图形场景         |
-| **konva**             | ^10.0.12  | Konva 核心库                    |
-| **framer-motion**     | ^12.23.25 | 动画与过渡效果                  |
+| 技术                  | 版本      | 作用                                 |
+| --------------------- | --------- | ------------------------------------ |
+| **MUI (Material UI)** | ^7.3.6    | UI 组件库（滑条、按钮、侧边栏）      |
+| **@emotion/react**    | ^11.14.0  | MUI 样式引擎                         |
+| **@emotion/styled**   | ^11.14.1  | MUI styled 组件支持                  |
+| **react-konva**       | ^19.2.1   | Canvas 渲染物理图形场景              |
+| **konva**             | ^10.0.12  | Konva 核心库                         |
+| **framer-motion**     | ^12.23.25 | 动画与过渡效果                       |
+| **katex**             | ^0.16.x   | 数学公式渲染（在 `main.tsx` 中引入） |
 
 ## 1.3 状态管理
 
@@ -66,12 +67,11 @@ physics-lab/
 │   └── icons/                     # 图标素材
 │
 ├── src/
-│   ├── app/
-│   │   ├── router.tsx             # 路由表
-│   │   ├── layout/                # 布局组件（侧边栏/顶部栏）
-│   │   │   └── SidebarLayout.tsx
-│   │   └── menu/                  # 左侧分类菜单
-│   │       └── physicsMenu.ts
+│   ├── App.tsx                     # 路由表（使用 `HashRouter`，路由定义在此）
+│   ├── layout/                     # 布局组件（侧边栏/顶部栏）
+│   │   └── SidebarLayout.tsx
+│   └── menu/                       # 左侧分类菜单
+│       └── physicsMenu.ts
 │   │
 │   ├── components/                # 公共组件
 │   │   ├── ui/                    # 基础 UI 组件
@@ -244,13 +244,14 @@ export default function UniformMotionPage() {
 包括：
 
 - Button
+- Select
 - Slider
 - InputNumber
 - Switch
 - Card
 - Tabs
 
-UI 统一使用 MUI 风格。
+UI 统一使用 MUI 风格。常用图标使用 `lucide-react` 提供轻量图标。
 
 ---
 
