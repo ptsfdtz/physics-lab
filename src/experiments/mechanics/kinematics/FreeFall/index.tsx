@@ -1,33 +1,97 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { BlockMath } from 'react-katex';
 
-import { ParameterController, PhysicsCanvas } from '@/components';
+import { ExperimentChart, ParameterController, PhysicsCanvas, Select } from '@/components';
 import { useAnimationFrame } from '@/hooks/useAnimationFrame';
 
 import { defaultModel, modelConfigs } from './model';
 import type { FreeFallModel } from './model';
 import FreeFallRenderer from './renderer';
+import { buildSpec, samplePoint } from './echart';
 
 export default function FreeFallPage() {
   const [model, setModel] = useState<FreeFallModel>(defaultModel);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [chartXKey, setChartXKey] = useState<'t' | 'y' | 'v'>('t');
+  const [chartYKey, setChartYKey] = useState<'t' | 'y' | 'v'>('y');
+  const [chartData, setChartData] = useState<Array<{ t: number; y: number; v: number }>>([]);
 
   useAnimationFrame((deltaTime: number) => {
     setModel(prev => ({ ...prev, t: prev.t + deltaTime }));
   }, isPlaying);
 
+  useAnimationFrame((deltaTime: number) => {
+    if (!isPlaying) return;
+    setModel(prev => {
+      const newT = prev.t + deltaTime;
+      const newModel = { ...prev, t: newT };
+      const p = samplePoint(newModel);
+      setChartData(prevData => [...prevData, p]);
+      return newModel;
+    });
+  }, isPlaying);
+
   const handlePlayPause = useCallback(() => {
-    setIsPlaying(!isPlaying);
-  }, [isPlaying]);
+    setIsPlaying(prev => {
+      const next = !prev;
+      if (next) {
+        const p = samplePoint(model);
+        setChartData(prevData => [...prevData, p]);
+      }
+      return next;
+    });
+  }, [model]);
 
   const handleReset = useCallback(() => {
     setIsPlaying(false);
     setModel(defaultModel);
+    setChartData([]);
   }, []);
 
   return (
     <div className="flex h-full w-full">
-      <PhysicsCanvas>
+      <PhysicsCanvas
+        overlay={useMemo(() => {
+          const data = chartData;
+          const spec = buildSpec(chartXKey, chartYKey);
+
+          return (
+            <div className="h-full flex flex-col items-center">
+              <div className="p-2 bg-white/80 border-b border-gray-100 flex items-center gap-2">
+                <label className="text-lg font-bold text-gray-600">X:</label>
+                <Select
+                  value={chartXKey}
+                  onChange={v => setChartXKey(v)}
+                  options={[
+                    { value: 't', label: '时间 (t)' },
+                    { value: 'y', label: '高度 (y)' },
+                    { value: 'v', label: '速度 (v)' },
+                  ]}
+                />
+
+                <label className="text-lg font-bold text-gray-600">Y:</label>
+                <Select
+                  value={chartYKey}
+                  onChange={v => setChartYKey(v)}
+                  options={[
+                    { value: 'y', label: '高度 (y)' },
+                    { value: 'v', label: '速度 (v)' },
+                    { value: 't', label: '时间 (t)' },
+                  ]}
+                />
+              </div>
+
+              <div className="flex-1 p-1 w-full">
+                <ExperimentChart
+                  spec={spec}
+                  data={data}
+                  style={{ width: '100%', height: '100%' }}
+                />
+              </div>
+            </div>
+          );
+        }, [chartData, chartXKey, chartYKey])}
+      >
         <FreeFallRenderer model={model} onModelChange={setModel} />
       </PhysicsCanvas>
 
@@ -38,7 +102,7 @@ export default function FreeFallPage() {
         onPlayPause={handlePlayPause}
         onReset={handleReset}
         isPlaying={isPlaying}
-        formula={<BlockMath math="y = y_0 + v_0 t + \tfrac{1}{2} g t^2" />}
+        formula={<BlockMath math="y = y_0 + v_0 t + \\tfrac{1}{2} g t^2" />}
       />
     </div>
   );
