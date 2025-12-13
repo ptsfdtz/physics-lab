@@ -49,9 +49,40 @@ const ForceAnalysisRenderer: React.FC<Props> = ({
   }
 
   const netFx = Fx - friction;
-  // 显示用的合力：按照要求显示为 Fx 减去摩擦力的绝对值
-  const displayNetFx = Fx - Math.abs(friction);
+  // 物理合力（用于计算加速度）
   const ax = netFx / model.m;
+
+  // 为可视化引入平滑的摩擦显示值，避免瞬时跳变
+  const [displayF, setDisplayF] = useState(friction);
+  const displayFRef = React.useRef(displayF);
+
+  React.useEffect(() => {
+    let raf = 0;
+    let lastTs = 0;
+
+    const step = (ts: number) => {
+      if (!lastTs) lastTs = ts;
+      const dt = (ts - lastTs) / 1000;
+      lastTs = ts;
+      const alpha = Math.min(1, dt * 8);
+      const cur = displayFRef.current;
+      const next = cur + alpha * (friction - cur);
+      displayFRef.current = next;
+      setDisplayF(next);
+      if (Math.abs(next - friction) > 1e-3) {
+        raf = requestAnimationFrame(step);
+      }
+    };
+
+    raf = requestAnimationFrame(step);
+
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [friction]);
+
+  // 可视化合力使用平滑后的摩擦值
+  const displayNetFx = Fx - displayF;
 
   // 摩擦方向用于可视化：如果在运动中，摩擦方向必定与速度相反；若接近静止，用外力决定摩擦方向（抵消外力）
   const frictionDirection =
@@ -173,14 +204,15 @@ const ForceAnalysisRenderer: React.FC<Props> = ({
         />
 
         {/* Friction (horizontal) */}
-        {Math.abs(friction) > 0.01 && (
+        {/* Friction (horizontal) - 使用平滑显示值 */}
+        {Math.abs(displayF) > 0.01 && (
           <VectorArrow
             x={0}
             y={0}
-            length={Math.abs(friction) * FORCE_SCALE}
+            length={Math.abs(displayF) * FORCE_SCALE}
             angle={frictionAngle}
             color="#f59e0b"
-            label={`f=${friction.toFixed(2)}N`}
+            label={`f=${displayF.toFixed(2)}N`}
             labelOffsetY={10}
           />
         )}
@@ -255,6 +287,7 @@ const ForceAnalysisRenderer: React.FC<Props> = ({
             fill="#f59e0b"
           />
           <Text text={`摩擦 f = ${friction.toFixed(2)} N`} y={24} fontSize={16} fill="#f59e0b" />
+          <Text text={`摩擦 f = ${displayF.toFixed(2)} N`} y={24} fontSize={16} fill="#f59e0b" />
           <Text
             text={`合力 ΣFx = ${displayNetFx.toFixed(2)} N`}
             y={48}

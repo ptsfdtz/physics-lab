@@ -9,23 +9,35 @@ export function samplePoint(model: ForceAnalysisModel) {
   const thetaRad = (model.theta * Math.PI) / 180;
   const Fx = model.F * Math.cos(thetaRad);
   const Fy = model.F * Math.sin(thetaRad);
-  const N = m * G - Fy;
+  // 使用与渲染器一致的摩擦计算：当接近静止且外力不足以克服静摩擦时，静摩擦等于外力（抵消）
+  const N = Math.max(0, m * G - Fy);
   const f_mag = Math.max(0, model.mu * N);
 
-  // determine friction sign similar to renderer/logic
-  let frictionSign = 0;
-  if (Math.abs(Fx) > 1e-3) frictionSign = -Math.sign(Fx);
-  else if (Math.abs(model.v) >= 1e-3) frictionSign = -Math.sign(model.v);
+  const eps = 1e-3;
+  // 计算 signed 摩擦力（力的方向：摩擦总是与运动或外力趋向相反）
+  let fSigned = 0;
+  if (Math.abs(model.v) < eps) {
+    if (Math.abs(Fx) <= f_mag) {
+      // 静摩擦完全抵消外力：f_signed = -Fx，使得 Fx + f_signed = 0
+      fSigned = -Fx;
+    } else {
+      // 外力超过静摩擦上限，摩擦变为动摩擦，方向与外力相反
+      fSigned = -Math.sign(Fx) * f_mag;
+    }
+  } else {
+    // 运动摩擦：与速度方向相反
+    fSigned = -Math.sign(model.v) * f_mag;
+  }
 
-  const frictionSigned = frictionSign * f_mag;
-  const netFx = Fx + frictionSigned;
+  const netFx = Fx + fSigned; // 合力为外力 + 摩擦（signed）
 
   return {
     t,
     x: model.x,
     v: model.v,
     Fx,
-    f: frictionSigned,
+    f: Math.abs(fSigned), // 返回给图表的摩擦为正的幅值
+    fSigned,
     netFx,
   };
 }

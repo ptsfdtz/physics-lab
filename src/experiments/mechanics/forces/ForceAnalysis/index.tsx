@@ -3,6 +3,7 @@ import { BlockMath } from 'react-katex';
 
 import { ChartControls, ExperimentChart, ParameterController, PhysicsCanvas } from '@/components';
 import { useAnimationFrame } from '@/hooks/useAnimationFrame';
+import { G } from '@/physics/constants';
 
 import { buildSpec, samplePoint } from './echart';
 import type { ForceAnalysisModel } from './model';
@@ -16,7 +17,15 @@ export default function ForceAnalysisPage() {
   const [chartXKey, setChartXKey] = useState<'t' | 'x' | 'v' | 'Fx' | 'f' | 'netFx'>('t');
   const [chartYKey, setChartYKey] = useState<'t' | 'x' | 'v' | 'Fx' | 'f' | 'netFx'>('v');
   const [chartData, setChartData] = useState<
-    Array<{ t: number; x: number; v: number; Fx: number; f: number; netFx: number }>
+    Array<{
+      t: number;
+      x: number;
+      v: number;
+      Fx: number;
+      f: number;
+      fSigned?: number;
+      netFx: number;
+    }>
   >([]);
 
   // Animation Loop: 积分计算速度和位移，并在同一次回调中采样图表点
@@ -24,7 +33,7 @@ export default function ForceAnalysisPage() {
     if (!isPlaying) return;
 
     setModel(prev => {
-      const g = 9.81;
+      const g = G;
       const m = prev.m;
       const thetaRad = (prev.theta * Math.PI) / 180;
       const Fx = prev.F * Math.cos(thetaRad);
@@ -47,7 +56,12 @@ export default function ForceAnalysisPage() {
         const sample = samplePoint(stoppedModel);
         setChartData(prevData => {
           const last = prevData[prevData.length - 1];
-          if (!last || last.t !== sample.t) return [...prevData, sample];
+          // 指数平滑（根据帧时间），让摩擦曲线平滑上升/下降
+          const alpha = Math.min(1, deltaTime * 8);
+          const smoothedF = last ? last.f + alpha * (sample.f - last.f) : sample.f;
+          const sign = Math.sign(sample.fSigned ?? (sample.Fx >= 0 ? 1 : -1));
+          const sampleAdjusted = { ...sample, f: smoothedF, netFx: sample.Fx + sign * smoothedF };
+          if (!last || last.t !== sample.t) return [...prevData, sampleAdjusted];
           return prevData;
         });
         return stoppedModel;
@@ -77,7 +91,11 @@ export default function ForceAnalysisPage() {
       const sample = samplePoint(newModel);
       setChartData(prevData => {
         const last = prevData[prevData.length - 1];
-        if (!last || last.t !== sample.t) return [...prevData, sample];
+        const alpha = Math.min(1, deltaTime * 8);
+        const smoothedF = last ? last.f + alpha * (sample.f - last.f) : sample.f;
+        const sign = Math.sign(sample.fSigned ?? (sample.Fx >= 0 ? 1 : -1));
+        const sampleAdjusted = { ...sample, f: smoothedF, netFx: sample.Fx + sign * smoothedF };
+        if (!last || last.t !== sample.t) return [...prevData, sampleAdjusted];
         return prevData;
       });
 
