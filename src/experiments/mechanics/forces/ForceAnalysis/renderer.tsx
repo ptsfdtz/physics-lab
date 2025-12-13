@@ -1,6 +1,6 @@
-import Konva from 'konva';
 import React, { useEffect, useState } from 'react';
-import { Layer, Rect, Circle, Group, Text } from 'react-konva';
+import Konva from 'konva';
+import { Circle, Group, Layer, Rect, Text } from 'react-konva';
 
 import { VectorArrow } from '@/components/physics/VectorArrow';
 

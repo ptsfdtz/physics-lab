@@ -1,5 +1,5 @@
-import { ChevronDown } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 
 import { Button } from './Button';
 

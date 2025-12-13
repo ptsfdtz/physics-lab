@@ -24,6 +24,8 @@ export default {
     // 提交主题不能为空
     'subject-empty': [2, 'never'],
     // 提交主题最大长度
-    'subject-max-length': [2, 'always', 100],
+    'subject-max-length': [2, 'always', 200],
+    // 提交头部（header）最大长度
+    'header-max-length': [2, 'always', 200],
   },
 };

@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export const useAnimationFrame = (callback: (deltaTime: number) => void, isRunning: boolean) => {
   const requestRef = useRef<number | undefined>(undefined);

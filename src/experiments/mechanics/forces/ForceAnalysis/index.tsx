@@ -4,8 +4,8 @@ import { BlockMath } from 'react-katex';
 import { ParameterController, PhysicsCanvas } from '@/components';
 import { useAnimationFrame } from '@/hooks/useAnimationFrame';
 
-import { defaultModel, modelConfigs } from './model';
 import type { ForceAnalysisModel } from './model';
+import { defaultModel, modelConfigs } from './model';
 import ForceAnalysisRenderer from './renderer';
 
 export default function ForceAnalysisPage() {

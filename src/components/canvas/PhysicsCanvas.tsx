@@ -7,7 +7,6 @@ import { Button } from '../ui/Button';
 
 interface PhysicsCanvasProps {
   children: React.ReactNode;
-  /** 可选覆盖层（例如图表）会显示在画布之上 */
   overlay?: React.ReactNode;
 }
 
@@ -16,6 +15,14 @@ export const PhysicsCanvas: React.FC<PhysicsCanvasProps> = ({ children, overlay 
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const { showGrid } = useUserSettings();
   const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayPos, setOverlayPos] = useState<{ x: number; y: number } | null>(null);
+  const dragState = useRef<{
+    dragging: boolean;
+    startX: number;
+    startY: number;
+    origX: number;
+    origY: number;
+  } | null>(null);
 
   useEffect(() => {
     const updateSize = () => {
@@ -31,6 +38,32 @@ export const PhysicsCanvas: React.FC<PhysicsCanvasProps> = ({ children, overlay 
     updateSize();
 
     return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const s = dragState.current;
+      const el = containerRef.current;
+      if (!s || !s.dragging || !el) return;
+      const dx = e.clientX - s.startX;
+      const dy = e.clientY - s.startY;
+      let nx = s.origX + dx;
+      let ny = s.origY + dy;
+      nx = Math.max(8, Math.min(el.offsetWidth - 320 - 8, nx));
+      ny = Math.max(8, Math.min(el.offsetHeight - 240 - 8, ny));
+      setOverlayPos({ x: nx, y: ny });
+    };
+
+    const onUp = () => {
+      if (dragState.current) dragState.current.dragging = false;
+    };
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+    };
   }, []);
 
   return (
@@ -62,8 +95,28 @@ export const PhysicsCanvas: React.FC<PhysicsCanvasProps> = ({ children, overlay 
 
       {/* 覆盖层（例如图表） */}
       {overlay && showOverlay ? (
-        <div className="absolute bottom-16 right-4 w-96 h-90 bg-white/95 rounded-xl shadow-lg overflow-hidden border border-gray-200">
-          {overlay}
+        <div
+          className="drag-handle cursor-move p-2 bg-white/80 border-b text-sm text-gray-600"
+          onMouseDown={e => {
+            const el = containerRef.current;
+            dragState.current = {
+              dragging: true,
+              startX: e.clientX,
+              startY: e.clientY,
+              origX: overlayPos ? overlayPos.x : el ? el.offsetWidth - 16 - 384 : 0,
+              origY: overlayPos ? overlayPos.y : el ? el.offsetHeight - 64 - 360 : 0,
+            };
+            e.preventDefault();
+          }}
+        >
+          <div
+            className={`absolute w-96 h-90 bg-white/95 rounded-xl shadow-lg overflow-hidden border border-gray-200`}
+            style={
+              overlayPos ? { left: overlayPos.x, top: overlayPos.y } : { right: 16, bottom: 64 }
+            }
+          >
+            <div className="w-full h-[calc(100%-40px)]">{overlay}</div>
+          </div>
         </div>
       ) : null}
     </div>

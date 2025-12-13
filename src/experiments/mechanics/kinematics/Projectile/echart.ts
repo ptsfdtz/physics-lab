@@ -1,4 +1,5 @@
 import type { ExperimentChartSpec } from '@/components/chart/types';
+
 import type { ProjectileModel } from './model';
 
 export function samplePoint(model: ProjectileModel) {

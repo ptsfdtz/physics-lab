@@ -1,13 +1,13 @@
-import { useCallback, useState, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { BlockMath } from 'react-katex';
 
-import { ExperimentChart, ParameterController, PhysicsCanvas, Select } from '@/components';
+import { ChartControls, ExperimentChart, ParameterController, PhysicsCanvas } from '@/components';
 import { useAnimationFrame } from '@/hooks/useAnimationFrame';
 
-import { defaultModel, modelConfigs } from './model';
-import type { ProjectileModel } from './model';
-import ProjectileRenderer from './renderer';
 import { buildSpec, samplePoint } from './echart';
+import type { ProjectileModel } from './model';
+import { defaultModel, modelConfigs } from './model';
+import ProjectileRenderer from './renderer';
 
 export default function ProjectilePage() {
   const [model, setModel] = useState<ProjectileModel>(defaultModel);
@@ -59,33 +59,26 @@ export default function ProjectilePage() {
 
           return (
             <div className="h-full flex flex-col items-center">
-              <div className="p-2 bg-white/80 border-b border-gray-100 flex items-center gap-2">
-                <label className="text-lg font-bold text-gray-600">X:</label>
-                <Select
-                  value={chartXKey}
-                  onChange={v => setChartXKey(v)}
-                  options={[
-                    { value: 't', label: '时间 (t)' },
-                    { value: 'x', label: '横坐标 (x)' },
-                    { value: 'y', label: '高度 (y)' },
-                    { value: 'v', label: '速度 (v)' },
-                  ]}
-                />
+              <ChartControls
+                xKey={chartXKey}
+                yKey={chartYKey}
+                onXChange={v => setChartXKey(v)}
+                onYChange={v => setChartYKey(v)}
+                xOptions={[
+                  { value: 't', label: '时间 (t)' },
+                  { value: 'x', label: '横坐标 (x)' },
+                  { value: 'y', label: '高度 (y)' },
+                  { value: 'v', label: '速度 (v)' },
+                ]}
+                yOptions={[
+                  { value: 'x', label: '横坐标 (x)' },
+                  { value: 'y', label: '高度 (y)' },
+                  { value: 'v', label: '速度 (v)' },
+                  { value: 't', label: '时间 (t)' },
+                ]}
+              />
 
-                <label className="text-lg font-bold text-gray-600">Y:</label>
-                <Select
-                  value={chartYKey}
-                  onChange={v => setChartYKey(v)}
-                  options={[
-                    { value: 'x', label: '横坐标 (x)' },
-                    { value: 'y', label: '高度 (y)' },
-                    { value: 'v', label: '速度 (v)' },
-                    { value: 't', label: '时间 (t)' },
-                  ]}
-                />
-              </div>
-
-              <div className="flex-1 p-1 w-full">
+              <div className="flex-1 p-1 w-full border-t border-gray-200">
                 <ExperimentChart
                   spec={spec}
                   data={data}

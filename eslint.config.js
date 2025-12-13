@@ -3,6 +3,7 @@ import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
+import simpleSort from 'eslint-plugin-simple-import-sort';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import eslintPluginPrettier from 'eslint-plugin-prettier';
 import eslintConfigPrettier from 'eslint-config-prettier';
@@ -20,6 +21,7 @@ export default defineConfig([
     ],
     plugins: {
       prettier: eslintPluginPrettier,
+      'simple-import-sort': simpleSort,
     },
     languageOptions: {
       ecmaVersion: 2020,
@@ -27,6 +29,26 @@ export default defineConfig([
     },
     rules: {
       'prettier/prettier': 'error',
+      'simple-import-sort/imports': [
+        'error',
+        {
+          groups: [
+            // Side effect imports
+            ['^\\u0000'],
+            // Packages (react first)
+            ['^react$', '^@?\\w'],
+            // Internal aliases (src)
+            ['^(@|src)(/.*|$)'],
+            // Parent imports
+            ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+            // Sibling imports
+            ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)'],
+            // Style imports
+            ['^.+\\.s?css$'],
+          ],
+        },
+      ],
+      'simple-import-sort/exports': 'error',
     },
   },
 ]);
