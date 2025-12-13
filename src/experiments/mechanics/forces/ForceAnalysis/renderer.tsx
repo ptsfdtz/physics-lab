@@ -81,8 +81,8 @@ const ForceAnalysisRenderer: React.FC<Props> = ({
     };
   }, [friction]);
 
-  // 可视化合力使用平滑后的摩擦值
-  const displayNetFx = Fx - displayF;
+  // 可视化合力使用平滑后的摩擦幅值：ΣF = Fx - |f|
+  const displayNetFx = Fx - Math.abs(displayF);
 
   // 摩擦方向用于可视化：如果在运动中，摩擦方向必定与速度相反；若接近静止，用外力决定摩擦方向（抵消外力）
   const frictionDirection =
