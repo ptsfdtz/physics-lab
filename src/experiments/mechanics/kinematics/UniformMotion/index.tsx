@@ -62,8 +62,8 @@ export default function UniformMotionPage() {
 
           return (
             <div className="h-full flex flex-col items-center">
-              <div className="p-2 bg-white/80 border-b border-gray-100 flex items-center gap-2">
-                <label className="text-lg font-bold text-gray-600">X:</label>
+              <div className="p-2 bg-white/80 flex items-center gap-2">
+                <label className="text-lg font-bold text-gray-600">X轴:</label>
                 <Select
                   value={chartXKey}
                   onChange={v => setChartXKey(v)}
@@ -74,7 +74,7 @@ export default function UniformMotionPage() {
                   ]}
                 />
 
-                <label className="text-lg font-bold text-gray-600">Y:</label>
+                <label className="text-lg font-bold text-gray-600">Y轴:</label>
                 <Select
                   value={chartYKey}
                   onChange={v => setChartYKey(v)}
@@ -86,7 +86,7 @@ export default function UniformMotionPage() {
                 />
               </div>
 
-              <div className="flex-1 p-1 w-full">
+              <div className="flex-1 p-1 w-full border-t border-gray-200">
                 <ExperimentChart
                   spec={spec}
                   data={data}

@@ -17,16 +17,22 @@ export default function FreeFallPage() {
   const [chartData, setChartData] = useState<Array<{ t: number; y: number; v: number }>>([]);
 
   useAnimationFrame((deltaTime: number) => {
-    setModel(prev => ({ ...prev, t: prev.t + deltaTime }));
-  }, isPlaying);
-
-  useAnimationFrame((deltaTime: number) => {
     if (!isPlaying) return;
     setModel(prev => {
       const newT = prev.t + deltaTime;
       const newModel = { ...prev, t: newT };
       const p = samplePoint(newModel);
-      setChartData(prevData => [...prevData, p]);
+      setChartData(prevData => {
+        const last = prevData[prevData.length - 1];
+        if (!last || last.t !== p.t) return [...prevData, p];
+        return prevData;
+      });
+
+      // if object has landed, stop playback
+      if (p.y === 0) {
+        setIsPlaying(false);
+      }
+
       return newModel;
     });
   }, isPlaying);
@@ -57,8 +63,8 @@ export default function FreeFallPage() {
 
           return (
             <div className="h-full flex flex-col items-center">
-              <div className="p-2 bg-white/80 border-b border-gray-100 flex items-center gap-2">
-                <label className="text-lg font-bold text-gray-600">X:</label>
+              <div className="p-2 bg-white/80 flex items-center gap-2">
+                <label className="text-lg font-bold text-gray-600">X轴:</label>
                 <Select
                   value={chartXKey}
                   onChange={v => setChartXKey(v)}
@@ -69,7 +75,7 @@ export default function FreeFallPage() {
                   ]}
                 />
 
-                <label className="text-lg font-bold text-gray-600">Y:</label>
+                <label className="text-lg font-bold text-gray-600">Y轴:</label>
                 <Select
                   value={chartYKey}
                   onChange={v => setChartYKey(v)}
@@ -81,7 +87,7 @@ export default function FreeFallPage() {
                 />
               </div>
 
-              <div className="flex-1 p-1 w-full">
+              <div className="flex-1 p-1 w-full border-t border-gray-200">
                 <ExperimentChart
                   spec={spec}
                   data={data}
@@ -102,7 +108,7 @@ export default function FreeFallPage() {
         onPlayPause={handlePlayPause}
         onReset={handleReset}
         isPlaying={isPlaying}
-        formula={<BlockMath math="y = y_0 + v_0 t + \\tfrac{1}{2} g t^2" />}
+        formula={<BlockMath math="y = \tfrac{1}{2} g t^{2}" />}
       />
     </div>
   );
