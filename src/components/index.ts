@@ -1,4 +1,5 @@
 export { PhysicsCanvas } from './canvas/PhysicsCanvas';
+export { ChartControls } from './chart/ChartControls';
 export { ChartHost } from './chart/ChartHost';
 export { ChartPanel } from './chart/ChartPanel';
 export { ExperimentChart } from './chart/ExperimentChart';

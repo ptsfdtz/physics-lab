@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { BlockMath } from 'react-katex';
 
-import { ExperimentChart, ParameterController, PhysicsCanvas, Select } from '@/components';
+import { ChartControls, ExperimentChart, ParameterController, PhysicsCanvas } from '@/components';
 import { useAnimationFrame } from '@/hooks/useAnimationFrame';
 
 import { buildSpec, samplePoint } from './echart';
@@ -63,29 +63,12 @@ export default function FreeFallPage() {
 
           return (
             <div className="h-full flex flex-col items-center">
-              <div className="p-2 bg-white/80 flex items-center gap-2">
-                <label className="text-lg font-bold text-gray-600">X轴:</label>
-                <Select
-                  value={chartXKey}
-                  onChange={v => setChartXKey(v)}
-                  options={[
-                    { value: 't', label: '时间 (t)' },
-                    { value: 'y', label: '高度 (y)' },
-                    { value: 'v', label: '速度 (v)' },
-                  ]}
-                />
-
-                <label className="text-lg font-bold text-gray-600">Y轴:</label>
-                <Select
-                  value={chartYKey}
-                  onChange={v => setChartYKey(v)}
-                  options={[
-                    { value: 'y', label: '高度 (y)' },
-                    { value: 'v', label: '速度 (v)' },
-                    { value: 't', label: '时间 (t)' },
-                  ]}
-                />
-              </div>
+              <ChartControls
+                xKey={chartXKey}
+                yKey={chartYKey}
+                onXChange={v => setChartXKey(v)}
+                onYChange={v => setChartYKey(v)}
+              />
 
               <div className="flex-1 p-1 w-full border-t border-gray-200">
                 <ExperimentChart
