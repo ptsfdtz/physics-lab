@@ -2,8 +2,9 @@ import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-import { physicsMenu } from '../../menu/physicsMenu';
-import type { MenuItem } from '../../types/types';
+import pkg from '@/../package.json';
+import { physicsMenu } from '@/menu/physicsMenu';
+import type { MenuItem } from '@/types/types';
 
 function hasActiveChild(node: MenuItem, pathname: string): boolean {
   if (node.path && node.path === pathname) return true;
@@ -108,7 +109,7 @@ export const Sidebar: React.FC = () => {
         ))}
       </nav>
       <div className="p-4 border-t border-gray-200 text-xs text-center text-gray-400">
-        v1.0.0 © {new Date().getFullYear()} Physics Lab
+        v{pkg.version} © {new Date().getFullYear()} Physics Lab
       </div>
     </aside>
   );
