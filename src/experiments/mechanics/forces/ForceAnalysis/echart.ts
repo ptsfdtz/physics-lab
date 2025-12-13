@@ -1,4 +1,5 @@
 import type { ExperimentChartSpec } from '@/components/chart/types';
+import { G } from '@/physics/constants';
 
 import type { ForceAnalysisModel } from './model';
 
@@ -8,8 +9,7 @@ export function samplePoint(model: ForceAnalysisModel) {
   const thetaRad = (model.theta * Math.PI) / 180;
   const Fx = model.F * Math.cos(thetaRad);
   const Fy = model.F * Math.sin(thetaRad);
-  const g = 9.81;
-  const N = m * g - Fy;
+  const N = m * G - Fy;
   const f_mag = Math.max(0, model.mu * N);
 
   // determine friction sign similar to renderer/logic

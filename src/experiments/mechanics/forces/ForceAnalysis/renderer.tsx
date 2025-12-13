@@ -3,6 +3,7 @@ import Konva from 'konva';
 import { Circle, Group, Layer, Rect, Text } from 'react-konva';
 
 import { VectorArrow } from '@/components/physics/VectorArrow';
+import { G } from '@/physics/constants';
 
 import type { ForceAnalysisModel } from './model';
 
@@ -21,7 +22,6 @@ const ForceAnalysisRenderer: React.FC<Props> = ({
 }) => {
   const SCALE_POS = 40; // pixels per meter for position
   const FORCE_SCALE = 6; // pixels per N for force visualization
-  const G = 9.81;
 
   const TRACK_Y = 600;
   const LEFT_PADDING = 60;

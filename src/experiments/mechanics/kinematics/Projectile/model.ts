@@ -1,3 +1,4 @@
+import { G } from '@/physics/constants';
 import type { ParameterConfig } from '@/types/types';
 
 export interface ProjectileModel {
@@ -10,11 +11,11 @@ export interface ProjectileModel {
 }
 
 export const defaultModel: ProjectileModel = {
-  v: 20,
+  v: 10,
   angle: 45,
   x0: 0,
-  y0: 10,
-  g: 9.8,
+  y0: 0,
+  g: G,
   t: 0,
 };
 
