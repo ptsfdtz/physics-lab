@@ -1,3 +1,4 @@
+import { G } from '@/physics/constants';
 import type { ParameterConfig } from '@/types/types';
 
 export interface FreeFallModel {
@@ -10,7 +11,7 @@ export interface FreeFallModel {
 export const defaultModel: FreeFallModel = {
   v0: 0,
   y0: 90,
-  g: 9.8,
+  g: G,
   t: 0,
 };
 
