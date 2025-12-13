@@ -4,10 +4,10 @@ import { BlockMath } from 'react-katex';
 import { ExperimentChart, ParameterController, PhysicsCanvas, Select } from '@/components';
 import { useAnimationFrame } from '@/hooks/useAnimationFrame';
 
-import { defaultModel, modelConfigs } from './model';
-import type { FreeFallModel } from './model';
-import FreeFallRenderer from './renderer';
 import { buildSpec, samplePoint } from './echart';
+import type { FreeFallModel } from './model';
+import { defaultModel, modelConfigs } from './model';
+import FreeFallRenderer from './renderer';
 
 export default function FreeFallPage() {
   const [model, setModel] = useState<FreeFallModel>(defaultModel);

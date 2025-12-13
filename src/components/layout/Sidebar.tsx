@@ -1,5 +1,5 @@
-import { ChevronRight } from 'lucide-react';
 import React from 'react';
+import { ChevronRight } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 import { physicsMenu } from '../../menu/physicsMenu';

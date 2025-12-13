@@ -1,5 +1,5 @@
 import React from 'react';
-import { Arrow, Text, Group } from 'react-konva';
+import { Arrow, Group, Text } from 'react-konva';
 
 interface VectorArrowProps {
   x: number;

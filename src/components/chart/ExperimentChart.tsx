@@ -1,5 +1,5 @@
-import type { EChartsOption } from 'echarts';
 import { useMemo } from 'react';
+import type { EChartsOption } from 'echarts';
 import type { CSSProperties } from 'react';
 
 import { ChartHost } from './ChartHost';

@@ -1,5 +1,5 @@
-import Konva from 'konva';
 import React from 'react';
+import Konva from 'konva';
 import { Circle, Group, Layer, Rect, Text } from 'react-konva';
 
 import { VectorArrow } from '@/components';

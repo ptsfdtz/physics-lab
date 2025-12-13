@@ -5,8 +5,8 @@ import { ExperimentChart, ParameterController, PhysicsCanvas, Select } from '@/c
 import { useAnimationFrame } from '@/hooks/useAnimationFrame';
 
 import { buildSpec, samplePoint } from './echart';
-import { defaultModel, modelConfigs } from './model';
 import type { UniformAccelerationModel } from './model';
+import { defaultModel, modelConfigs } from './model';
 import { UniformAccelerationRenderer } from './renderer';
 
 export default function UniformAccelerationPage() {

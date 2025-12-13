@@ -1,13 +1,13 @@
-import { useCallback, useState, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { BlockMath } from 'react-katex';
 
 import { ExperimentChart, ParameterController, PhysicsCanvas, Select } from '@/components';
 import { useAnimationFrame } from '@/hooks/useAnimationFrame';
 
-import { defaultModel, modelConfigs } from './model';
-import type { ProjectileModel } from './model';
-import ProjectileRenderer from './renderer';
 import { buildSpec, samplePoint } from './echart';
+import type { ProjectileModel } from './model';
+import { defaultModel, modelConfigs } from './model';
+import ProjectileRenderer from './renderer';
 
 export default function ProjectilePage() {
   const [model, setModel] = useState<ProjectileModel>(defaultModel);

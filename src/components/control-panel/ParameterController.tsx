@@ -1,5 +1,5 @@
-import { Play, Pause, RotateCcw } from 'lucide-react';
 import React from 'react';
+import { Pause, Play, RotateCcw } from 'lucide-react';
 
 import { Button } from '@/components/ui/Button';
 import type { ParameterConfig } from '@/types/types';

@@ -4,10 +4,10 @@ import { BlockMath } from 'react-katex';
 import { ExperimentChart, ParameterController, PhysicsCanvas, Select } from '@/components';
 import { useAnimationFrame } from '@/hooks/useAnimationFrame';
 
-import { defaultModel, modelConfigs } from './model';
-import type { UniformMotionModel } from './model';
-import { UniformMotionRenderer } from './renderer';
 import { buildSpec, samplePoint } from './echart';
+import type { UniformMotionModel } from './model';
+import { defaultModel, modelConfigs } from './model';
+import { UniformMotionRenderer } from './renderer';
 
 export default function UniformMotionPage() {
   const [model, setModel] = useState<UniformMotionModel>(defaultModel);
