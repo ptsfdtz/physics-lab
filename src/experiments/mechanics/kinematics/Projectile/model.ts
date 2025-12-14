@@ -11,10 +11,10 @@ export interface ProjectileModel {
 }
 
 export const defaultModel: ProjectileModel = {
-  v: 10,
-  angle: 45,
-  x0: 0,
-  y0: 0,
+  v: 12,
+  angle: 40,
+  x0: -40,
+  y0: 10,
   g: G,
   t: 0,
 };

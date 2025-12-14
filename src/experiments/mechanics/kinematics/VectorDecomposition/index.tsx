@@ -103,7 +103,9 @@ export default function VectorDecompositionPage() {
         onReset={handleReset}
         isPlaying={isPlaying}
         onDecompose={handleDecompose}
-        formula={<BlockMath math={'x = x_0 + v_x t\\ y = y_0 + v_y t - 	frac{1}{2} g t^2'} />}
+        formula={
+          <BlockMath math="\begin{cases}x = x_0 + v\cos\theta\,t\\y = y_0 + v\sin\theta\,t - \tfrac{1}{2}gt^2\end{cases}" />
+        }
       />
     </div>
   );
