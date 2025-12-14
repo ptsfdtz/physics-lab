@@ -24,12 +24,12 @@ export const physicsMenu: MenuItem[] = [
             path: '/mechanics/kinematics/free-fall',
           },
           {
-            label: '抛体运动',
-            path: '/mechanics/kinematics/projectile',
-          },
-          {
             label: '运动的合成与分解',
             path: '/mechanics/kinematics/vector-decomposition',
+          },
+          {
+            label: '抛体运动',
+            path: '/mechanics/kinematics/projectile',
           },
         ],
       },
