@@ -9,6 +9,7 @@ import ProjectilePage from '@/experiments/mechanics/kinematics/Projectile';
 import ReferenceFramePage from '@/experiments/mechanics/kinematics/ReferenceFrame';
 import UniformAccelerationPage from '@/experiments/mechanics/kinematics/UniformAcceleration';
 import UniformMotionPage from '@/experiments/mechanics/kinematics/UniformMotion';
+import VectorDecompositionPage from '@/experiments/mechanics/kinematics/VectorDecomposition';
 
 const App: React.FC = () => {
   return (
@@ -17,6 +18,10 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/mechanics/kinematics/uniform-motion" element={<UniformMotionPage />} />
+          <Route
+            path="/mechanics/kinematics/vector-decomposition"
+            element={<VectorDecompositionPage />}
+          />
           <Route path="/mechanics/kinematics/reference-frame" element={<ReferenceFramePage />} />
           <Route
             path="/mechanics/kinematics/uniform-acceleration"
