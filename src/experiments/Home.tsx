@@ -1,4 +1,4 @@
-import { Activity, ArrowRight, Box, Zap } from 'lucide-react';
+import { Activity, Aperture, ArrowRight, Atom, Box, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Home() {
@@ -13,13 +13,25 @@ export default function Home() {
       title: '电磁学',
       icon: <Zap className="text-yellow-500" size={32} />,
       desc: '实时可视化场、电荷和电路。',
-      link: '/em/electric-field',
+      link: '/em/electric-field/coulomb',
     },
     {
       title: '波',
       icon: <Activity className="text-green-500" size={32} />,
       desc: '理解振动、叠加和波的传播。',
       link: '/waves/shm',
+    },
+    {
+      title: '光学',
+      icon: <Aperture className="text-indigo-500" size={32} />,
+      desc: '研究光的传播、反射与折射现象。',
+      link: '/optics/reflection-refraction',
+    },
+    {
+      title: '近代物理',
+      icon: <Atom className="text-pink-500" size={32} />,
+      desc: '探索原子、能级与核反应的基本概念。',
+      link: '/modern/atom',
     },
   ];
 
