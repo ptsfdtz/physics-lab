@@ -1,25 +1,25 @@
 import { G } from '@/physics/constants';
 import type { ParameterConfig } from '@/types/types';
 
-export interface ProjectileModel {
+export interface VectorDecompositionModel {
   v: number; // initial speed magnitude (m/s)
-  angle: number; // launch angle in degrees (upwards)
-  x0: number; // initial horizontal position (m)
-  y0: number; // initial height above ground (m)
-  g: number; // gravity (m/s^2)
-  t: number; // time (s)
+  angle: number; // launch angle in degrees
+  x0: number;
+  y0: number;
+  g: number;
+  t: number;
 }
 
-export const defaultModel: ProjectileModel = {
+export const defaultModel: VectorDecompositionModel = {
   v: 12,
   angle: 40,
-  x0: -40,
+  x0: -20,
   y0: 10,
   g: G,
   t: 0,
 };
 
-export const modelConfigs: Record<keyof ProjectileModel, ParameterConfig> = {
+export const modelConfigs: Record<keyof VectorDecompositionModel, ParameterConfig> = {
   v: { label: '初速度 (v)', min: 0, max: 100, step: 1, unit: 'm/s' },
   angle: { label: '发射角 (θ)', min: 0, max: 90, step: 1, unit: '°' },
   x0: { label: '初始横坐标 (x₀)', min: -50, max: 50, step: 1, unit: 'm' },

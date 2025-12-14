@@ -1,9 +1,11 @@
 import { useCallback, useState } from 'react';
 import { BlockMath } from 'react-katex';
 
-import { ParameterController, PhysicsCanvas } from '@/components';
+import { ChartControls, ExperimentChart, ParameterController, PhysicsCanvas } from '@/components';
 import { useAnimationFrame } from '@/hooks/useAnimationFrame';
+import { G } from '@/physics/constants';
 
+import { buildSpec, samplePoint } from './echart';
 import type { ForceAnalysisModel } from './model';
 import { defaultModel, modelConfigs } from './model';
 import ForceAnalysisRenderer from './renderer';
@@ -12,13 +14,26 @@ export default function ForceAnalysisPage() {
   const [model, setModel] = useState<ForceAnalysisModel>(defaultModel);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDecomposing, setIsDecomposing] = useState(false);
+  const [chartXKey, setChartXKey] = useState<'t' | 'x' | 'v' | 'Fx' | 'f' | 'netFx'>('t');
+  const [chartYKey, setChartYKey] = useState<'t' | 'x' | 'v' | 'Fx' | 'f' | 'netFx'>('v');
+  const [chartData, setChartData] = useState<
+    Array<{
+      t: number;
+      x: number;
+      v: number;
+      Fx: number;
+      f: number;
+      fSigned?: number;
+      netFx: number;
+    }>
+  >([]);
 
-  // Animation Loop: 积分计算速度和位移
+  // Animation Loop: 积分计算速度和位移，并在同一次回调中采样图表点
   useAnimationFrame((deltaTime: number) => {
     if (!isPlaying) return;
 
     setModel(prev => {
-      const g = 9.81;
+      const g = G;
       const m = prev.m;
       const thetaRad = (prev.theta * Math.PI) / 180;
       const Fx = prev.F * Math.cos(thetaRad);
@@ -32,54 +47,77 @@ export default function ForceAnalysisPage() {
 
       // 静摩擦平衡判断：当速度几乎为 0 且外力不足以克服静摩擦时，物体保持静止
       if (Math.abs(prev.v) < eps && Math.abs(Fx) <= f_mag) {
-        return {
+        const stoppedModel = {
           ...prev,
           v: 0,
           x: prev.x, // 位置不变
           t: prev.t + deltaTime,
         };
+        const sample = samplePoint(stoppedModel);
+        setChartData(prevData => {
+          const last = prevData[prevData.length - 1];
+          // 指数平滑（根据帧时间），让摩擦曲线平滑上升/下降
+          const alpha = Math.min(1, deltaTime * 8);
+          const smoothedF = last ? last.f + alpha * (sample.f - last.f) : sample.f;
+          const sign = Math.sign(sample.fSigned ?? (sample.Fx >= 0 ? 1 : -1));
+          const sampleAdjusted = { ...sample, f: smoothedF, netFx: sample.Fx + sign * smoothedF };
+          if (!last || last.t !== sample.t) return [...prevData, sampleAdjusted];
+          return prevData;
+        });
+        return stoppedModel;
       }
-
-      // 确定摩擦力方向：优先让摩擦力反向于外力方向（避免合力成为外力与摩擦力绝对值之和），
-      // 当外力几乎为零时再让摩擦力反向于速度方向以阻尼运动。
       let frictionSign = 0;
       if (Math.abs(Fx) > eps) frictionSign = -Math.sign(Fx);
       else if (Math.abs(prev.v) >= eps) frictionSign = -Math.sign(prev.v);
 
-      // 带符号摩擦力（方向与外力或速度相反）
       const frictionSigned = frictionSign * f_mag;
 
-      // 合力：外力与摩擦力代数和（注意 frictionSigned 已含方向）
       const netFx = Fx + frictionSigned;
 
-      // 加速度
       const ax = netFx / m;
-
-      // 积分更新速度和位置（显式欧拉），并避免速度在零附近因数值误差而反向震荡
       let newV = prev.v + ax * deltaTime;
-      // 若速度在该步发生翻转且幅值很小，则认为被摩擦或阻力钳制为静止
       if (Math.sign(prev.v) !== Math.sign(newV) && Math.abs(newV) < 1e-2) {
         newV = 0;
       }
 
       const newX = prev.x + newV * deltaTime;
-
-      return {
+      const newModel = {
         ...prev,
         v: newV,
         x: newX,
         t: prev.t + deltaTime,
       };
+
+      const sample = samplePoint(newModel);
+      setChartData(prevData => {
+        const last = prevData[prevData.length - 1];
+        const alpha = Math.min(1, deltaTime * 8);
+        const smoothedF = last ? last.f + alpha * (sample.f - last.f) : sample.f;
+        const sign = Math.sign(sample.fSigned ?? (sample.Fx >= 0 ? 1 : -1));
+        const sampleAdjusted = { ...sample, f: smoothedF, netFx: sample.Fx + sign * smoothedF };
+        if (!last || last.t !== sample.t) return [...prevData, sampleAdjusted];
+        return prevData;
+      });
+
+      return newModel;
     });
   }, isPlaying);
 
   const handlePlayPause = useCallback(() => {
-    setIsPlaying(!isPlaying);
-  }, [isPlaying]);
+    setIsPlaying(prev => {
+      const next = !prev;
+      if (next) {
+        const p = samplePoint(model);
+        setChartData(prevData => [...prevData, p]);
+      }
+      return next;
+    });
+  }, [model]);
 
   const handleReset = useCallback(() => {
     setIsPlaying(false);
     setModel(defaultModel);
+    setChartData([]);
   }, []);
 
   const handleDecompose = useCallback(() => {
@@ -88,7 +126,46 @@ export default function ForceAnalysisPage() {
 
   return (
     <div className="flex h-full w-full">
-      <PhysicsCanvas>
+      <PhysicsCanvas
+        overlay={(() => {
+          const spec = buildSpec(chartXKey, chartYKey);
+          const data = chartData;
+          return (
+            <div className="h-full flex flex-col items-center">
+              <ChartControls
+                xKey={chartXKey}
+                yKey={chartYKey}
+                onXChange={v => setChartXKey(v)}
+                onYChange={v => setChartYKey(v)}
+                xOptions={[
+                  { value: 't', label: '时间 (t)' },
+                  { value: 'x', label: '位置 (x)' },
+                  { value: 'v', label: '速度 (v)' },
+                  { value: 'Fx', label: '外力 (Fx)' },
+                  { value: 'f', label: '摩擦 (f)' },
+                  { value: 'netFx', label: '合力 (ΣF)' },
+                ]}
+                yOptions={[
+                  { value: 't', label: '时间 (t)' },
+                  { value: 'x', label: '位置 (x)' },
+                  { value: 'v', label: '速度 (v)' },
+                  { value: 'Fx', label: '外力 (Fx)' },
+                  { value: 'f', label: '摩擦 (f)' },
+                  { value: 'netFx', label: '合力 (ΣF)' },
+                ]}
+              />
+
+              <div className="flex-1 p-1 w-full border-t border-gray-200">
+                <ExperimentChart
+                  spec={spec}
+                  data={data}
+                  style={{ width: '100%', height: '100%' }}
+                />
+              </div>
+            </div>
+          );
+        })()}
+      >
         <ForceAnalysisRenderer
           model={model}
           onModelChange={setModel}

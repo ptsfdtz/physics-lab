@@ -2,8 +2,9 @@ import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-import { physicsMenu } from '../../menu/physicsMenu';
-import type { MenuItem } from '../../types/types';
+import pkg from '@/../package.json';
+import { physicsMenu } from '@/menu/physicsMenu';
+import type { MenuItem } from '@/types/types';
 
 function hasActiveChild(node: MenuItem, pathname: string): boolean {
   if (node.path && node.path === pathname) return true;
@@ -63,7 +64,7 @@ const SidebarItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, depth
 
       {hasChildren && (
         <div
-          className={`overflow-hidden transition-all duration-600 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+          className={`overflow-hidden transition-all duration-600 ease-in-out ${isOpen ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}
         >
           <div className="mt-1">
             {item.children!.map((child, index) => (
@@ -79,7 +80,7 @@ const SidebarItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, depth
 export const Sidebar: React.FC = () => {
   return (
     <aside className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col shrink-0">
-      <div className="p-4 border-b border-gray-200 flex items-center gap-2">
+      <a href="/" className="p-4 border-b border-gray-200 flex items-center gap-2">
         <div className="p-2 bg-blue-600 rounded-lg text-white">
           <svg
             className="icon"
@@ -101,14 +102,14 @@ export const Sidebar: React.FC = () => {
           <h1 className="font-bold text-gray-900 text-lg leading-tight">Physics Lab</h1>
           <p className="text-xs text-gray-500">Visualization Platform</p>
         </div>
-      </div>
-      <nav className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+      </a>
+      <nav className="flex-1 overflow-y-auto p-3 custom-scrollbar">
         {physicsMenu.map((item, index) => (
           <SidebarItem key={index} item={item} />
         ))}
       </nav>
       <div className="p-4 border-t border-gray-200 text-xs text-center text-gray-400">
-        v1.0.0 © {new Date().getFullYear()} Physics Lab
+        v{pkg.version} © {new Date().getFullYear()} Physics Lab
       </div>
     </aside>
   );
