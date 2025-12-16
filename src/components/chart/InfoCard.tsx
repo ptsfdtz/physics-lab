@@ -49,6 +49,22 @@ export const ChartInfoCard: React.FC<ChartInfoCardProps> = ({
       x={x}
       y={y}
       draggable={draggable}
+      onMouseEnter={e => {
+        const container = e.target.getStage()?.container();
+        if (container) container.style.cursor = 'grab';
+      }}
+      onMouseDown={e => {
+        const container = e.target.getStage()?.container();
+        if (container) container.style.cursor = 'grabbing';
+      }}
+      onMouseUp={e => {
+        const container = e.target.getStage()?.container();
+        if (container) container.style.cursor = 'grab';
+      }}
+      onMouseLeave={e => {
+        const container = e.target.getStage()?.container();
+        if (container) container.style.cursor = 'default';
+      }}
       onDragEnd={e => onDragEnd?.({ x: e.target.x(), y: e.target.y() })}
     >
       <Rect
@@ -72,7 +88,13 @@ export const ChartInfoCard: React.FC<ChartInfoCardProps> = ({
           fontStyle="bold"
         />
       )}
-      <Group x={padding} y={title ? padding + titleFontSize + 8 : padding}>
+      <Group
+        x={padding}
+        y={title ? padding + titleFontSize + 8 : padding}
+        ref={node => {
+          contentRef.current = node;
+        }}
+      >
         {children}
       </Group>
     </Group>
