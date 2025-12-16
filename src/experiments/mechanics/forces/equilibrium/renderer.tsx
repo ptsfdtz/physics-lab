@@ -16,11 +16,12 @@ const EquilibriumRenderer: React.FC<Props> = ({ model }) => {
   const ORIGIN_X = WIDTH / 2;
   const ORIGIN_Y = HEIGHT / 2 + 60;
   const FORCE_SCALE = 6;
+  const POS_SCALE = 40; // m -> px
 
   const { v1, v2, v3, w, sum, mag } = computeVectors(model);
 
-  const bodyX = ORIGIN_X;
-  const bodyY = ORIGIN_Y;
+  const bodyX = ORIGIN_X + model.x * POS_SCALE;
+  const bodyY = ORIGIN_Y + model.y * POS_SCALE;
 
   return (
     <Layer>

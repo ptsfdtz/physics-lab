@@ -12,6 +12,11 @@ export interface EquilibriumModel {
   theta3: number;
   // 是否包含重力
   includeWeight: number; // 0 或 1
+  // 位置和速度
+  x: number; // 位置 (m)
+  y: number; // 位置 (m)
+  vx: number; // 速度 (m/s)
+  vy: number; // 速度 (m/s)
 }
 
 export const defaultModel: EquilibriumModel = {
@@ -23,6 +28,10 @@ export const defaultModel: EquilibriumModel = {
   F3: 10,
   theta3: 240,
   includeWeight: 0,
+  x: 0,
+  y: 0,
+  vx: 0,
+  vy: 0,
 };
 
 export const modelConfigs: Record<keyof EquilibriumModel, ParameterConfig> = {
@@ -34,6 +43,10 @@ export const modelConfigs: Record<keyof EquilibriumModel, ParameterConfig> = {
   F3: { label: 'F3 大小', min: 0, max: 50, step: 1, unit: 'N' },
   theta3: { label: 'F3 角度 (°)', min: -180, max: 180, step: 5, unit: '°' },
   includeWeight: { label: '包含重力', min: 0, max: 1, step: 1 },
+  x: { label: 'x', readonly: true },
+  y: { label: 'y', readonly: true },
+  vx: { label: 'vx', readonly: true },
+  vy: { label: 'vy', readonly: true },
 };
 
 export function computeVectors(model: EquilibriumModel) {
@@ -49,4 +62,18 @@ export function computeVectors(model: EquilibriumModel) {
   const sum = { x: v1.x + v2.x + v3.x + w.x, y: v1.y + v2.y + v3.y + w.y };
   const mag = Math.hypot(sum.x, sum.y);
   return { v1, v2, v3, w, sum, mag };
+}
+
+export function integrate(model: EquilibriumModel, dt: number): EquilibriumModel {
+  const { sum } = computeVectors(model);
+  const ax = sum.x / model.m;
+  const ay = sum.y / model.m;
+
+  const damping = 0.98;
+  const vx = (model.vx + ax * dt) * damping;
+  const vy = (model.vy + ay * dt) * damping;
+  const x = model.x + vx * dt;
+  const y = model.y + vy * dt;
+
+  return { ...model, vx, vy, x, y };
 }
