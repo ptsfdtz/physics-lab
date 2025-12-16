@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Konva from 'konva';
 import { Circle, Group, Layer, Rect, Text } from 'react-konva';
 
+import { ChartInfoCard } from '@/components';
 import { VectorArrow } from '@/components/physics/VectorArrow';
 import { G } from '@/physics/constants';
 
@@ -268,37 +269,48 @@ const ForceAnalysisRenderer: React.FC<Props> = ({
         )}
       </Group>
 
-      <Group x={LEFT_PADDING + 10 + 8 * SCALE_POS} y={40}>
-        <Text text="实时计算" fontSize={20} fontStyle="bold" fill="#0f172a" />
-        <Group x={0} y={30}>
-          <Text text={`质量 m = ${model.m.toFixed(2)} kg`} y={0} fontSize={16} fill="#334155" />
-          <Text text={`外力 F = ${model.F.toFixed(2)} N`} y={24} fontSize={16} fill="#334155" />
-          <Text text={`角度 θ = ${model.theta.toFixed(1)}°`} y={48} fontSize={16} fill="#334155" />
-          <Text text={`Fx = ${Fx.toFixed(2)} N`} y={72} fontSize={16} fill="#ef4444" />
-          <Text text={`Fy = ${Fy.toFixed(2)} N`} y={96} fontSize={16} fill="#0ea5e9" />
-          <Text text={`支撑力 N = ${N.toFixed(2)} N`} y={120} fontSize={16} fill="#6366f1" />
-        </Group>
+      <ChartInfoCard
+        x={LEFT_PADDING + 10 + 8 * SCALE_POS}
+        y={40}
+        width={420}
+        title="实时计算"
+        titleFontSize={20}
+      >
+        <Group>
+          <Group x={0} y={0}>
+            <Text text={`质量 m = ${model.m.toFixed(2)} kg`} y={0} fontSize={16} fill="#334155" />
+            <Text text={`外力 F = ${model.F.toFixed(2)} N`} y={24} fontSize={16} fill="#334155" />
+            <Text
+              text={`角度 θ = ${model.theta.toFixed(1)}°`}
+              y={48}
+              fontSize={16}
+              fill="#334155"
+            />
+            <Text text={`Fx = ${Fx.toFixed(2)} N`} y={72} fontSize={16} fill="#ef4444" />
+            <Text text={`Fy = ${Fy.toFixed(2)} N`} y={96} fontSize={16} fill="#0ea5e9" />
+            <Text text={`支撑力 N = ${N.toFixed(2)} N`} y={120} fontSize={16} fill="#6366f1" />
+          </Group>
 
-        <Group x={220} y={30}>
-          <Text
-            text={`摩擦上限 μN = ${maxFriction.toFixed(2)} N`}
-            y={0}
-            fontSize={16}
-            fill="#f59e0b"
-          />
-          <Text text={`摩擦 f = ${friction.toFixed(2)} N`} y={24} fontSize={16} fill="#f59e0b" />
-          <Text text={`摩擦 f = ${displayF.toFixed(2)} N`} y={24} fontSize={16} fill="#f59e0b" />
-          <Text
-            text={`合力 ΣFx = ${displayNetFx.toFixed(2)} N`}
-            y={48}
-            fontSize={16}
-            fill="#111827"
-          />
-          <Text text={`加速度 a = ${ax.toFixed(3)} m/s²`} y={72} fontSize={16} fill="#111827" />
-          <Text text={`速度 v = ${model.v.toFixed(3)} m/s`} y={96} fontSize={16} fill="#065f46" />
-          <Text text={`位置 x = ${model.x.toFixed(3)} m`} y={120} fontSize={16} fill="#065f46" />
+          <Group x={210} y={0}>
+            <Text
+              text={`摩擦上限 μN = ${maxFriction.toFixed(2)} N`}
+              y={0}
+              fontSize={16}
+              fill="#f59e0b"
+            />
+            <Text text={`摩擦 f = ${displayF.toFixed(2)} N`} y={24} fontSize={16} fill="#f59e0b" />
+            <Text
+              text={`合力 ΣFx = ${displayNetFx.toFixed(2)} N`}
+              y={48}
+              fontSize={16}
+              fill="#111827"
+            />
+            <Text text={`加速度 a = ${ax.toFixed(3)} m/s²`} y={72} fontSize={16} fill="#111827" />
+            <Text text={`速度 v = ${model.v.toFixed(3)} m/s`} y={96} fontSize={16} fill="#065f46" />
+            <Text text={`位置 x = ${model.x.toFixed(3)} m`} y={120} fontSize={16} fill="#065f46" />
+          </Group>
         </Group>
-      </Group>
+      </ChartInfoCard>
     </Layer>
   );
 };
