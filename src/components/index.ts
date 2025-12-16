@@ -3,6 +3,7 @@ export { ChartControls } from './chart/ChartControls';
 export { ChartHost } from './chart/ChartHost';
 export { ChartPanel } from './chart/ChartPanel';
 export { ExperimentChart } from './chart/ExperimentChart';
+export { ChartInfoCard } from './chart/InfoCard';
 export { ParameterController } from './control-panel/ParameterController';
 export { default as MainLayout } from './layout/MainLayout';
 export { Sidebar } from './layout/Sidebar';

@@ -4,6 +4,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom';
 import { MainLayout } from '@/components';
 import Home from '@/experiments/Home';
 import ForceAnalysisPage from '@/experiments/mechanics/forces/ForceAnalysis';
+import ForceTypesPage from '@/experiments/mechanics/forces/ForceTypes';
 import FreeFallPage from '@/experiments/mechanics/kinematics/FreeFall';
 import ProjectilePage from '@/experiments/mechanics/kinematics/Projectile';
 import ReferenceFramePage from '@/experiments/mechanics/kinematics/ReferenceFrame';
@@ -29,6 +30,7 @@ const App: React.FC = () => {
           />
           <Route path="/mechanics/kinematics/free-fall" element={<FreeFallPage />} />
           <Route path="/mechanics/kinematics/projectile" element={<ProjectilePage />} />
+          <Route path="/mechanics/forces/force-types" element={<ForceTypesPage />} />
           <Route path="/mechanics/forces/force-analysis" element={<ForceAnalysisPage />} />
           {/* Fallback for undeveloped routes */}
           <Route path="*" element={<div className="p-8 text-gray-500">Coming Soon...</div>} />
